@@ -11,3 +11,11 @@ export interface ErrorResponse extends BaseResponse {
 export interface DataResponse<T> extends BaseResponse {
   data: T;
 }
+
+export interface FullResponse<T> {
+  status: number;
+  message: string;
+  path: string;
+  errors: string[];
+  data: T;
+}

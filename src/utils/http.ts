@@ -1,6 +1,5 @@
 import { API_URL } from "@/constants/api";
 import axios, { AxiosInstance } from "axios";
-import { toast } from "sonner";
 
 class HTTP {
   public instance: AxiosInstance = null;
@@ -23,8 +22,7 @@ class HTTP {
       response => response,
       error => {
         const res = error.response;
-        console.log(res);
-        toast(res.message);
+        throw res.message;
       }
     );
   }
