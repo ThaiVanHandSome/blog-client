@@ -8,9 +8,10 @@ export const API_ENDPOINTS = {
     LOGIN: `${API_URL}/auth/login`,
     SEND_EMAIL_FORGOT_PASSWORD: `${API_URL}/auth/forgot-password-token`,
     VERIFY_FORGOT_PASSWORD_TOKEN: `${API_URL}/auth/verify-forgot-password-token`,
-    RESET_PASSWORD: `${API_URL}/auth/reset-password`
+    RESET_PASSWORD: `${API_URL}/auth/reset-password`,
   },
   BLOG: {
-    CREATE: `${API_URL}/blogs/create`
-  }
+    GET_ALL: `${API_URL}/blogs`,
+    CREATE: `${API_URL}/blogs/create`,
+  },
 };

@@ -1,10 +1,11 @@
 import { Button } from "@/components/ui/button";
-import { ButtonProps } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import React from "react";
 
-interface LoadingButtonProps extends ButtonProps {
+interface LoadingButtonProps extends React.ComponentProps<typeof Button> {
   isLoading?: boolean;
   loadingText?: string;
+  children?: React.ReactNode;
 }
 
 export default function LoadingButton({

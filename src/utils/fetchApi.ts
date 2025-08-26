@@ -1,23 +1,42 @@
+"use client";
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ApiError } from "next/dist/server/api-utils";
 import { toast } from "sonner";
+
+type FetchOptions<T> = {
+  url: string;
+  method?: string;
+  body?: T;
+  headers?: Record<string, string>;
+  cache?: RequestCache;
+};
 
 export async function fetchApi<T>({
   url,
   method = "GET",
   body,
   headers = {},
-  cache
+  cache,
 }: FetchOptions<T>): Promise<T> {
   try {
+    const isFormData = body instanceof FormData;
+
     const res = await fetch(url, {
       method,
-      headers: {
-        "Content-Type": "application/json",
-        ...headers
-      },
+      headers: isFormData
+        ? headers // FormData → avoid losing boundary
+        : {
+            "Content-Type": "application/json",
+            ...headers,
+          },
       credentials: "include",
-      body: body ? JSON.stringify(body) : undefined,
-      cache
+      body: body
+        ? isFormData
+          ? (body as any)
+          : JSON.stringify(body)
+        : undefined,
+      cache,
     });
 
     const data = await res.json();
