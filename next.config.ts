@@ -4,6 +4,9 @@ const nextConfig: NextConfig = {
   images: {
     domains: ["images.unsplash.com", "res.cloudinary.com"],
   },
+  unstable_includeFiles: [
+    'node_modules/next/dist/compiled/@edge-runtime/primitives/**/*.+(js|json)',
+  ],
   theme: {
     extends: {
       colors: {

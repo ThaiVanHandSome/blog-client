@@ -1,70 +1,100 @@
 import React from "react";
 import Image from "next/image";
-import { Calendar, Clock, User } from "lucide-react";
+import Link from "next/link";
+import { Calendar, Clock, Tag } from "lucide-react";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Blog } from "@/types/blog.type";
+import { buildBlogSlug } from "@/lib/utils";
 
 interface BlogCardProps {
-  blog: Blog;
+  readonly blog: Blog;
 }
 
-export default function BlogCard({ blog }: BlogCardProps) {
+export default function BlogCard({ blog }: Readonly<BlogCardProps>) {
+  const words = blog.content?.trim()?.split(/\s+/).length || 0;
+  const readMinutes = Math.max(1, Math.ceil(words / 200));
+
+  const formattedDate = (() => {
+    const d = new Date(blog.published_at);
+    if (isNaN(d.getTime())) return blog.published_at;
+    return d.toLocaleDateString("en-US", {
+      month: "short",
+      day: "2-digit",
+      year: "numeric",
+    });
+  })();
+
+  const initials = blog.author?.name
+    ?.split(" ")
+    .map((n) => n[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
+
   return (
-    <article className="group relative overflow-hidden rounded-2xl bg-white shadow-lg transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 border border-gray-100">
-      {/* Thumbnail */}
-      <div className="relative h-64 overflow-hidden">
-        <Image
-          src={blog.thumbnail}
-          alt={blog.title}
-          fill
-          className="object-cover transition-transform duration-500 group-hover:scale-110"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+    <Link
+      href={`/blogs/${buildBlogSlug(blog.title, blog._id)}`}
+      prefetch={false}
+      className="group block w-full focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-200"
+    >
+      <article className="w-full relative overflow-hidden border-b border-gray-200 transition-colors duration-150 hover:bg-gray-50">
+        <div className="flex items-stretch gap-4 p-3 md:p-4">
+          {/* Thumbnail (Compact Full-Width Row) */}
+          <div className="relative h-24 w-36 md:h-28 md:w-44 shrink-0 overflow-hidden rounded-md">
+            <Image
+              src={blog.thumbnail}
+              alt={blog.title}
+              fill
+              sizes="(max-width: 768px) 144px, 176px"
+              className="object-cover transition-transform duration-300 group-hover:scale-105"
+              priority={false}
+            />
+            <span
+              className="absolute left-2 top-2 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-gradient-to-r from-indigo-50/95 to-blue-50/95 text-blue-700 ring-1 ring-inset ring-blue-200/60 shadow-sm backdrop-blur-sm transition-colors duration-200 group-hover:from-indigo-100 group-hover:to-blue-100"
+              aria-label="Blog topic"
+              title={`Topic: ${blog.topic}`}
+            >
+              <Tag className="h-3.5 w-3.5" />
+              <span className="uppercase tracking-wide">{blog.topic}</span>
+            </span>
+          </div>
 
-        {/* Category Badge */}
-        <div className="absolute top-4 left-4">
-          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-white/90 text-gray-800 backdrop-blur-sm">
-            {blog.topic}
-          </span>
-        </div>
-      </div>
+          {/* Content (Compact) */}
+          <div className="min-w-0 flex-1">
+            <h3 className="text-xl font-semibold text-gray-900 tracking-tight line-clamp-1 group-hover:text-blue-600">
+              {blog.title}
+            </h3>
+            <p className="mt-1 text-sm text-gray-600 line-clamp-2">
+              {blog.description}
+            </p>
 
-      {/* Content */}
-      <div className="p-6">
-        {/* Title */}
-        <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors duration-200">
-          {blog.title}
-        </h3>
+            <div className="mt-2 flex items-center justify-between">
+              <div className="flex items-center gap-2 min-w-0 text-[13px] text-gray-500">
+                <Avatar className="h-7 w-7">
+                  <AvatarFallback className="text-[11px]">
+                    {initials}
+                  </AvatarFallback>
+                </Avatar>
+                <span className="truncate">{blog.author.name}</span>
+                <span className="text-gray-300">•</span>
+                <span className="inline-flex items-center gap-1 shrink-0">
+                  <Calendar className="h-3.5 w-3.5" />
+                  {formattedDate}
+                </span>
+                <span className="text-gray-300">•</span>
+                <span className="inline-flex items-center gap-1 shrink-0">
+                  <Clock className="h-3.5 w-3.5" />
+                  {readMinutes}m
+                </span>
+              </div>
 
-        {/* Description */}
-        <p className="text-gray-600 mb-4 line-clamp-3 leading-relaxed">
-          {blog.description}
-        </p>
-
-        {/* Meta Information */}
-        <div className="flex items-center justify-between text-sm text-gray-500">
-          <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-1">
-              <User className="w-4 h-4" />
-              <span>{blog.author.name}</span>
-            </div>
-            <div className="flex items-center space-x-1">
-              <Calendar className="w-4 h-4" />
-              <span>{blog.published_at}</span>
+              <span className="shrink-0 text-[13px] font-medium text-blue-600 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                Read →
+              </span>
             </div>
           </div>
-          <div className="flex items-center space-x-1">
-            <Clock className="w-4 h-4" />
-            <span>{blog.content.length} words</span>
-          </div>
         </div>
-
-        {/* Read More Button */}
-        <div className="mt-4 pt-4 border-t border-gray-100">
-          <button className="text-blue-600 font-medium hover:text-blue-700 transition-colors duration-200 group-hover:underline">
-            Read More →
-          </button>
-        </div>
-      </div>
-    </article>
+      </article>
+    </Link>
   );
 }

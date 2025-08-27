@@ -10,6 +10,8 @@ type FetchOptions<T> = {
   body?: T;
   headers?: Record<string, string>;
   cache?: RequestCache;
+  showToastWhenSuccess?: boolean;
+  showToastWhenError?: boolean;
 };
 
 export async function fetchApi<T>({
@@ -18,6 +20,8 @@ export async function fetchApi<T>({
   body,
   headers = {},
   cache,
+  showToastWhenSuccess = true,
+  showToastWhenError = true,
 }: FetchOptions<T>): Promise<T> {
   try {
     const isFormData = body instanceof FormData;
@@ -43,11 +47,11 @@ export async function fetchApi<T>({
     const message = data.message;
 
     if (!res.ok) {
-      toast.error(message || "Something went wrong");
+      if (showToastWhenError) toast.error(message || "Something went wrong");
       throw new ApiError(res.status, message || "Unknown error");
     }
 
-    if (message) {
+    if (message && showToastWhenSuccess) {
       toast.success(message);
     }
 

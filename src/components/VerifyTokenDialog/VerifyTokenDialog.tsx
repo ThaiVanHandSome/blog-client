@@ -14,7 +14,7 @@ import { useMutation } from "@tanstack/react-query";
 
 export enum TOKEN_TYPE_ENUM {
   FORGOT_PASSWORD = "forgot-password",
-  REGISTRATION = "registration"
+  REGISTRATION = "registration",
 }
 
 interface VerifyTokenProps {
@@ -26,12 +26,12 @@ interface FormDataType {
 }
 
 const DEFAULT_VALUES: FormDataType = {
-  token: ""
+  token: "",
 };
 
 export default function VerifyTokenDialog({ type }: VerifyTokenProps) {
   const { register, handleSubmit } = useForm<FormDataType>({
-    defaultValues: DEFAULT_VALUES
+    defaultValues: DEFAULT_VALUES,
   });
 
   const router = useRouter();
@@ -43,8 +43,8 @@ export default function VerifyTokenDialog({ type }: VerifyTokenProps) {
       fetchApi({
         url: API_ENDPOINTS.AUTH.VERIFY_REGISTRATION,
         method: "POST",
-        body
-      })
+        body,
+      }),
   });
 
   const verifyForgotPasswordMutation = useMutation({
@@ -52,28 +52,28 @@ export default function VerifyTokenDialog({ type }: VerifyTokenProps) {
       fetchApi({
         url: API_ENDPOINTS.AUTH.VERIFY_FORGOT_PASSWORD_TOKEN,
         method: "POST",
-        body
-      })
+        body,
+      }),
   });
 
   const verifyTokenFunc = useCallback(
     async (tokenType: TOKEN_TYPE_ENUM, data: FormDataType) => {
       const body = {
-        token: data.token
+        token: data.token,
       };
       switch (tokenType) {
         case TOKEN_TYPE_ENUM.FORGOT_PASSWORD:
           return verifyForgotPasswordMutation.mutate(body, {
             onSuccess: () => {
               router.push(`/auth/reset-password?token=${data.token}`);
-            }
+            },
           });
 
         case TOKEN_TYPE_ENUM.REGISTRATION:
           return verifyRegistrationMutation.mutate(body, {
             onSuccess: () => {
               router.push("/auth/login");
-            }
+            },
           });
 
         default:
@@ -84,8 +84,8 @@ export default function VerifyTokenDialog({ type }: VerifyTokenProps) {
   );
 
   const isLoading =
-    verifyRegistrationMutation.isLoading ||
-    verifyForgotPasswordMutation.isLoading;
+    verifyRegistrationMutation.isPending ||
+    verifyForgotPasswordMutation.isPending;
 
   const onSubmit = handleSubmit(async (data: FormDataType) => {
     await verifyTokenFunc(type, data);

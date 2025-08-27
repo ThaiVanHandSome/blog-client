@@ -10,16 +10,17 @@ import LoadingButton from "@/components/LoadingButton";
 import { useRouter } from "next/navigation";
 import Action from "@/components/form/Action";
 import { useMutation } from "@tanstack/react-query";
+import { useAuth } from "@/hooks";
 
 const DEFAULT_VALUES: LoginInput = {
   email: "",
-  password: ""
+  password: "",
 };
 
-export default function RegisterPage() {
+export default function LoginPage() {
   const { control, handleSubmit } = useForm<LoginInput>({
     defaultValues: DEFAULT_VALUES,
-    resolver: zodResolver(loginSchema)
+    resolver: zodResolver(loginSchema),
   });
 
   const loginMutation = useMutation({
@@ -27,17 +28,20 @@ export default function RegisterPage() {
       fetchApi({
         url: API_ENDPOINTS.AUTH.LOGIN,
         method: "POST",
-        body: data
-      })
+        body: data,
+      }),
   });
+
+  const { refetch } = useAuth();
 
   const router = useRouter();
 
   const onSubmit = async (data: LoginInput) => {
     loginMutation.mutate(data, {
       onSuccess: () => {
+        refetch();
         router.push("/");
-      }
+      },
     });
   };
 
@@ -74,7 +78,7 @@ export default function RegisterPage() {
           <LoadingButton
             type="submit"
             className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
-            isLoading={loginMutation.isLoading}
+            isLoading={loginMutation.isPending}
             loadingText="Login..."
           >
             Login

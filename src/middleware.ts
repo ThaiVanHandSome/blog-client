@@ -1,11 +1,9 @@
-import { cookies } from "next/headers";
 import { NextResponse, NextRequest } from "next/server";
 
 const ACCESS_TOKEN_NAME = "blog-token";
 
-export async function middleware(request: NextRequest) {
-  const cookieStore = await cookies();
-  const accessToken = cookieStore.get(ACCESS_TOKEN_NAME);
+export function middleware(request: NextRequest) {
+  const accessToken = request.cookies.get(ACCESS_TOKEN_NAME)?.value;
 
   const { pathname } = request.nextUrl;
 
@@ -21,5 +19,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/:path*", "/((?!api|_next|.*\\..*).*)"]
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico|.*\\..*).*)"],
 };

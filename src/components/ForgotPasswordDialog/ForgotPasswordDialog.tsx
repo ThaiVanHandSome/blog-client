@@ -16,12 +16,12 @@ interface FormInputType {
 }
 
 const DEFAULT_VALUES: FormInputType = {
-  email: ""
+  email: "",
 };
 
 export default function ForgotPasswordDialog() {
   const { control, handleSubmit } = useForm<FormInputType>({
-    defaultValues: DEFAULT_VALUES
+    defaultValues: DEFAULT_VALUES,
   });
 
   const [isOpen, setForgotPasswordIsOpen] = useAtom(forgotPasswordDialogAtom);
@@ -34,8 +34,8 @@ export default function ForgotPasswordDialog() {
       fetchApi({
         url: API_ENDPOINTS.AUTH.SEND_EMAIL_FORGOT_PASSWORD,
         method: "POST",
-        body: data
-      })
+        body: data,
+      }),
   });
 
   const onSubmit = handleSubmit(async (data: FormInputType) => {
@@ -43,7 +43,7 @@ export default function ForgotPasswordDialog() {
       onSuccess: () => {
         setForgotPasswordIsOpen(false);
         setVerifyTokenIsOpen(true);
-      }
+      },
     });
   });
 
@@ -54,11 +54,17 @@ export default function ForgotPasswordDialog() {
           <DialogTitle>Forgot Password</DialogTitle>
         </DialogHeader>
         <form onSubmit={onSubmit}>
-          <FormInput type="email" required name="email" control={control} />
+          <FormInput
+            label="Email"
+            type="email"
+            required
+            name="email"
+            control={control}
+          />
           <LoadingButton
             type="submit"
             loadingText="Send..."
-            isLoading={sendTokenForgotPasswordMutation.isLoading}
+            isLoading={sendTokenForgotPasswordMutation.isPending}
             className="float-right mt-4"
           >
             Send

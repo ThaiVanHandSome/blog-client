@@ -3,3 +3,9 @@ export interface RegisterRequest {
   email: string;
   password: string;
 }
+
+export interface MeResponse {
+  name: string;
+  email: string;
+  role: string;
+}

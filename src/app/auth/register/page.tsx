@@ -17,13 +17,13 @@ import { useMutation } from "@tanstack/react-query";
 const DEFAULT_VALUES: RegisterInput = {
   name: "",
   email: "",
-  password: ""
+  password: "",
 };
 
 export default function RegisterPage() {
   const { control, handleSubmit } = useForm<RegisterInput>({
     defaultValues: DEFAULT_VALUES,
-    resolver: zodResolver(registerSchema)
+    resolver: zodResolver(registerSchema),
   });
 
   const registerMutation = useMutation({
@@ -31,8 +31,8 @@ export default function RegisterPage() {
       fetchApi({
         url: API_ENDPOINTS.AUTH.REGISTER,
         method: "POST",
-        body: data
-      })
+        body: data,
+      }),
   });
 
   const [_, setIsOpen] = useAtom(verifyTokenDialogAtom);
@@ -41,7 +41,7 @@ export default function RegisterPage() {
     registerMutation.mutate(data, {
       onSuccess: () => {
         setIsOpen(true);
-      }
+      },
     });
   };
 
@@ -89,7 +89,7 @@ export default function RegisterPage() {
           <LoadingButton
             type="submit"
             className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
-            isLoading={registerMutation.isLoading}
+            isLoading={registerMutation.isPending}
             loadingText="Registering..."
           >
             Register
