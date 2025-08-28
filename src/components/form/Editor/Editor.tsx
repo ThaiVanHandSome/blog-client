@@ -25,7 +25,7 @@ const modules = {
     [{ script: "sub" }, { script: "super" }],
     [{ list: "ordered" }, { list: "bullet" }],
     [{ align: [] }],
-    ["link"],
+    ["link", "image"],
     ["code-block"],
     ["clean"]
   ]

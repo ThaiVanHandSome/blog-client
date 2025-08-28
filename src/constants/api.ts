@@ -21,4 +21,10 @@ export const API_ENDPOINTS = {
   LIKE: {
     CHECK_LIKED: (blogId: string) => `${API_URL}/likes/check?blogId=${blogId}`,
   },
+  COMMENT: {
+    CREATE: `${API_URL}/comments`,
+    GET_BY_BLOG: (blogId: string) => `${API_URL}/comments/blog/${blogId}`,
+    DELETE: (commentId: string) => `${API_URL}/comments/${commentId}`,
+    UPDATE: (commentId: string) => `${API_URL}/comments/${commentId}`,
+  },
 };

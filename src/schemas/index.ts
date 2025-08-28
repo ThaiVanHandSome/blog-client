@@ -14,29 +14,29 @@ const authSchema = z
       .toLowerCase(),
     password: z.string().min(6, "Password must be at least 6 characters"),
     newPassword: z.string().min(6, "Password must be at least 6 characters"),
-    repeatPassword: z.string().min(6, "Password must be at least 6 characters"),
+    repeatPassword: z.string().min(6, "Password must be at least 6 characters")
   })
-  .refine((data) => data.newPassword === data.repeatPassword, {
+  .refine(data => data.newPassword === data.repeatPassword, {
     path: ["repeatPassword"],
-    message: "Passwords do not match",
+    message: "Passwords do not match"
   });
 
 export const registerSchema = authSchema.pick({
   name: true,
   email: true,
-  password: true,
+  password: true
 });
 export type RegisterInput = z.infer<typeof registerSchema>;
 
 export const loginSchema = authSchema.pick({
   email: true,
-  password: true,
+  password: true
 });
 export type LoginInput = z.infer<typeof loginSchema>;
 
 export const resetPasswordSchema = authSchema.pick({
   newPassword: true,
-  repeatPassword: true,
+  repeatPassword: true
 });
 export type ResetPasswordInput = z.infer<typeof resetPasswordSchema>;
 
@@ -57,6 +57,11 @@ export const blogSchema = z.object({
     .max(50, "Topic must be less than 50 characters")
     .trim(),
   thumbnail: z.string().min(1, "Please select an image").trim(),
-  content: z.string().min(50, "Content must be at least 50 characters").trim(),
+  content: z.string().min(50, "Content must be at least 50 characters").trim()
 });
 export type BLogInput = z.infer<typeof blogSchema>;
+
+export const commentSchema = z.object({
+  content: z.string().max(1000, "Content must be less than 300 characters")
+});
+export type CommentInput = z.infer<typeof commentSchema>;

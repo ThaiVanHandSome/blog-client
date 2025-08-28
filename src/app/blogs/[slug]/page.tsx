@@ -4,17 +4,18 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import { Calendar, Clock } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import LikeButton from "@/components/LikeButton";
 import type { Blog } from "@/types/blog.type";
 import { cookies } from "next/headers";
+import LikeButton from "@/components/LikeButton";
+import { CommentSection } from "@/components/comment";
 
 async function getBlogById(id: string): Promise<Blog | null> {
   const cookieHeader = (await cookies()).toString();
   const res = await fetch(API_ENDPOINTS.BLOG.GET_BY_ID(id), {
     headers: {
-      Cookie: cookieHeader,
+      Cookie: cookieHeader
     },
-    cache: "no-store",
+    cache: "no-store"
   });
   if (!res.ok) return null;
   const data = await res.json();
@@ -25,9 +26,9 @@ async function checkLiked(blogId: string) {
   const cookieHeader = (await cookies()).toString();
   const res = await fetch(API_ENDPOINTS.LIKE.CHECK_LIKED(blogId), {
     headers: {
-      Cookie: cookieHeader,
+      Cookie: cookieHeader
     },
-    cache: "no-store",
+    cache: "no-store"
   });
   if (!res.ok) return false;
   const data = await res.json();
@@ -35,7 +36,7 @@ async function checkLiked(blogId: string) {
 }
 
 export default async function BlogDetailPage({
-  params,
+  params
 }: Readonly<{
   params: Promise<{ slug: string }>;
 }>) {
@@ -57,13 +58,13 @@ export default async function BlogDetailPage({
     return d.toLocaleDateString("en-US", {
       month: "short",
       day: "2-digit",
-      year: "numeric",
+      year: "numeric"
     });
   })();
 
   const initials = blog.author?.name
     ?.split(" ")
-    .map((n) => n[0])
+    .map(n => n[0])
     .slice(0, 2)
     .join("")
     .toUpperCase();
@@ -71,7 +72,7 @@ export default async function BlogDetailPage({
   return (
     <main className="container mx-auto max-w-3xl px-4 py-8">
       <article>
-        <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-gray-900">
+        <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-gray-900 break-words">
           {blog.title}
         </h1>
         <p className="mt-3 text-gray-600">{blog.description}</p>
@@ -111,6 +112,8 @@ export default async function BlogDetailPage({
           <div dangerouslySetInnerHTML={{ __html: blog.content }} />
         </div>
       </article>
+
+      <CommentSection blogId={id} />
     </main>
   );
 }
