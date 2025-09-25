@@ -27,4 +27,7 @@ export const API_ENDPOINTS = {
     DELETE: (commentId: string) => `${API_URL}/comments/${commentId}`,
     UPDATE: (commentId: string) => `${API_URL}/comments/${commentId}`,
   },
+  NOTIFICATIONS: {
+    GET_ALL: `${API_URL}/notifications`,
+  },
 };

@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { fetchApi } from "@/utils/fetchApi";
 import { API_ENDPOINTS } from "@/constants/api";
 import { useMutation } from "@tanstack/react-query";
+import { NotificationBell } from "@/components/NotificationBell";
 
 const Header = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -84,9 +85,15 @@ const Header = () => {
             ) : isAuthenticated && user ? (
               // Authenticated state
               <>
-                <div className="cursor-pointer" onClick={handleLogout}>
+                <NotificationBell />
+                <button
+                  type="button"
+                  aria-label="Sign out"
+                  onClick={handleLogout}
+                  className="p-2 rounded hover:bg-gray-100 text-gray-700"
+                >
                   <LogOutIcon />
-                </div>
+                </button>
                 <div className="hidden sm:block text-right">
                   <span className="text-sm font-medium text-gray-700">
                     {user.name}
