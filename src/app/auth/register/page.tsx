@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { useForm } from "react-hook-form";
@@ -17,13 +18,13 @@ import { useMutation } from "@tanstack/react-query";
 const DEFAULT_VALUES: RegisterInput = {
   name: "",
   email: "",
-  password: "",
+  password: ""
 };
 
 export default function RegisterPage() {
   const { control, handleSubmit } = useForm<RegisterInput>({
     defaultValues: DEFAULT_VALUES,
-    resolver: zodResolver(registerSchema),
+    resolver: zodResolver(registerSchema)
   });
 
   const registerMutation = useMutation({
@@ -31,8 +32,8 @@ export default function RegisterPage() {
       fetchApi({
         url: API_ENDPOINTS.AUTH.REGISTER,
         method: "POST",
-        body: data,
-      }),
+        body: data
+      })
   });
 
   const [_, setIsOpen] = useAtom(verifyTokenDialogAtom);
@@ -41,7 +42,7 @@ export default function RegisterPage() {
     registerMutation.mutate(data, {
       onSuccess: () => {
         setIsOpen(true);
-      },
+      }
     });
   };
 
