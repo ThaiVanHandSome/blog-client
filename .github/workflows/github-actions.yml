@@ -6,7 +6,7 @@ on:
 
 jobs:
   all-checks:
-    runs-on: ubuntu-lates
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
 
@@ -20,6 +20,7 @@ jobs:
         run: npm run test
 
   deploy:
+    needs: all-checks
     runs-on: ubuntu-latest
     container: ghcr.io/railwayapp/cli:latest
     env:
