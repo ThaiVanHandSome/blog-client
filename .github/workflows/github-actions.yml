@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     container: ghcr.io/railwayapp/cli:latest
     env:
-      SVC_ID: 74298dfe-ccd9-447e-a7e4-65cdd6b5be34
+      SVC_ID: c20747b5-6476-47b1-8f0c-39a1f4933a84
       RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
     steps:
       - uses: actions/checkout@v3
