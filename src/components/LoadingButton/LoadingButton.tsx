@@ -23,7 +23,7 @@ export default function LoadingButton({
       {...props}
     >
       {isLoading && (
-        <span>
+        <span data-testid="js-test-icon">
           <svg
             className="h-5 w-5 animate-spin text-current"
             xmlns="http://www.w3.org/2000/svg"

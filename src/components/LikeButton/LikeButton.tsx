@@ -15,7 +15,7 @@ type LikeButtonProps = {
 export default function LikeButton({
   blogId,
   initialLikes,
-  isLiked,
+  isLiked
 }: LikeButtonProps) {
   const [likes, setLikes] = useState<number>(initialLikes);
   const [isPending, startTransition] = useTransition();
@@ -24,22 +24,22 @@ export default function LikeButton({
   async function handleLike() {
     if (isPending) return;
     const optimisticLikes = liked ? likes - 1 : likes + 1;
-    setLiked((v) => !v);
+    setLiked(v => !v);
     setLikes(optimisticLikes);
 
     try {
       const res = await fetchApi<DataResponse<number>>({
         url: API_ENDPOINTS.BLOG.TOGGLE_LIKE(blogId),
         method: "POST",
-        showToastWhenSuccess: false,
+        showToastWhenSuccess: false
       });
       if (res?.data !== undefined) {
         setLikes(res.data);
       }
     } catch {
       // revert on error
-      setLiked((v) => !v);
-      setLikes((v) => (liked ? v + 1 : v - 1));
+      setLiked(v => !v);
+      setLikes(v => (liked ? v + 1 : v - 1));
     }
   }
 

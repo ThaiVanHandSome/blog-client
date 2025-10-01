@@ -10,9 +10,9 @@ const getBlogs = async () => {
     const blogsRes = await fetch(API_ENDPOINTS.BLOG.GET_ALL, {
       method: "GET",
       headers: {
-        Cookie: cookieHeader,
+        Cookie: cookieHeader
       },
-      cache: "no-store",
+      cache: "no-store"
     });
 
     return blogsRes.json();
@@ -29,7 +29,7 @@ export default async function HomePage() {
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="">
-          {blogs.map((blog) => (
+          {blogs.map(blog => (
             <BlogCard key={blog._id} blog={blog} />
           ))}
         </div>
