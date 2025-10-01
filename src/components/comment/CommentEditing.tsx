@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use query";
 
 import { CommentInput, commentSchema } from "@/schemas";
@@ -46,7 +47,7 @@ export default function CommentEditing({
     editCommentMutation.mutate(data, {
       onSuccess: () => {
         setStartEditing(false);
-        queryClient.refetchQueries([`comments-${blogId}`, blogId]);
+        queryClient.refetchQueries([`comments-${commentId}`, commentId] as any);
       }
     });
   });

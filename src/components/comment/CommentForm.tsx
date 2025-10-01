@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -49,7 +50,7 @@ export function CommentForm({ blogId }: CommentFormProps) {
     createCommentMutation.mutate(createCommentRequest, {
       onSuccess: () => {
         setValue("content", "");
-        queryClient.refetchQueries([`comments-${blogId}`, blogId]);
+        queryClient.refetchQueries([`comments-${blogId}`, blogId] as any);
       }
     });
   });

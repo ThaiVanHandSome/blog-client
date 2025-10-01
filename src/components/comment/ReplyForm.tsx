@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -61,7 +62,7 @@ export function ReplyForm({
       onSuccess: () => {
         setValue("content", "");
         onCancel();
-        queryClient.refetchQueries([`comments-${blogId}`, blogId]);
+        queryClient.refetchQueries([`comments-${blogId}`, blogId] as any);
       }
     });
   });

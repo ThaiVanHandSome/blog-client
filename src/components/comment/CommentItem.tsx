@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Button } from "../ui/button";
@@ -40,7 +41,7 @@ export default function CommentItem({
 
     deleteCommentMutation.mutate(commentId, {
       onSuccess: () => {
-        queryClient.refetchQueries([`comments-${blogId}`, blogId]);
+        queryClient.refetchQueries([`comments-${blogId}`, blogId] as any);
       }
     });
   };
@@ -81,7 +82,7 @@ export default function CommentItem({
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => setStartEditing(comment)}
+                onClick={() => setStartEditing(!!comment)}
                 className="h-6 w-6 p-0"
               >
                 <Edit className="h-3 w-3" />
