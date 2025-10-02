@@ -72,8 +72,8 @@ export default async function BlogDetailPage({
 
   const isLiked = await checkLiked(id);
 
-  const words = blog.content?.trim()?.split(/\s+/).length || 0;
-  const readMinutes = Math.max(1, Math.ceil(words / 200));
+  // const words = blog.content?.trim()?.split(/\s+/).length || 0;
+  // const readMinutes = Math.max(1, Math.ceil(words / 200));
 
   const formattedDate = (() => {
     const d = new Date(blog.published_at);

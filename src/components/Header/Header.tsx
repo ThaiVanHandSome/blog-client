@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Avatar, AvatarFallback } from "../ui/avatar";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useAuth } from "@/hooks";
 import { Button } from "../ui/button";
 import { LogOutIcon } from "lucide-react";
