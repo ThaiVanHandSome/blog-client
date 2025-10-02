@@ -34,18 +34,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${fontSerif.variable} ${fontDisplay.variable} antialiased`}
-      >
-        <ReactQueryProvider>
+    <ReactQueryProvider>
+      <html lang="en">
+        <body
+          className={`${fontSerif.variable} ${fontDisplay.variable} antialiased`}
+        >
           <>
             <Header />
             {children}
             <Toaster />
           </>
-        </ReactQueryProvider>
-      </body>
-    </html>
+        </body>
+      </html>
+    </ReactQueryProvider>
   );
 }
