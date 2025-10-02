@@ -10,15 +10,12 @@ import { CommentSection } from "@/components/comment";
 
 async function getBlogById(id: string): Promise<Blog | null> {
   const cookieHeader = (await cookies()).toString();
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.BLOG.GET_BY_ID(id)}`,
-    {
-      headers: {
-        Cookie: cookieHeader
-      },
-      cache: "no-store"
-    }
-  );
+  const res = await fetch(`${API_ENDPOINTS.BLOG.GET_BY_ID(id)}`, {
+    headers: {
+      Cookie: cookieHeader
+    },
+    cache: "no-store"
+  });
   if (!res.ok) return null;
   const data = await res.json();
   return data.data as Blog;
@@ -26,26 +23,19 @@ async function getBlogById(id: string): Promise<Blog | null> {
 
 async function checkLiked(blogId: string) {
   const cookieHeader = (await cookies()).toString();
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.LIKE.CHECK_LIKED(
-      blogId
-    )}`,
-    {
-      headers: {
-        Cookie: cookieHeader
-      },
-      cache: "no-store"
-    }
-  );
+  const res = await fetch(`${API_ENDPOINTS.LIKE.CHECK_LIKED(blogId)}`, {
+    headers: {
+      Cookie: cookieHeader
+    },
+    cache: "no-store"
+  });
   if (!res.ok) return false;
   const data = await res.json();
   return data.data as boolean;
 }
 
 export async function generateStaticParams() {
-  const blogsRes = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.BLOG.GET_ALL}`
-  );
+  const blogsRes = await fetch(`${API_ENDPOINTS.BLOG.GET_ALL}`);
   if (blogsRes.ok) {
     const res = await blogsRes.json();
     const data = res.data;

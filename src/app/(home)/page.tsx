@@ -7,16 +7,13 @@ const getBlogs = async () => {
   try {
     const cookieHeader = (await cookies()).toString();
 
-    const blogsRes = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.BLOG.GET_ALL}`,
-      {
-        method: "GET",
-        headers: {
-          Cookie: cookieHeader
-        },
-        cache: "no-store"
-      }
-    );
+    const blogsRes = await fetch(`${API_ENDPOINTS.BLOG.GET_ALL}`, {
+      method: "GET",
+      headers: {
+        Cookie: cookieHeader
+      },
+      cache: "no-store"
+    });
 
     return blogsRes.json();
   } catch (error) {
