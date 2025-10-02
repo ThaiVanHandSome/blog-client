@@ -7,7 +7,7 @@ const getBlogs = async () => {
   try {
     const cookieHeader = (await cookies()).toString();
 
-    const blogsRes = await fetch(API_ENDPOINTS.BLOG.GET_ALL, {
+    const blogsRes = await fetch(`${API_ENDPOINTS.BLOG.GET_ALL}`, {
       method: "GET",
       headers: {
         Cookie: cookieHeader
@@ -27,16 +27,24 @@ export default async function HomePage() {
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="space-y-4">
           {blogs.map(blog => (
             <BlogCard key={blog._id} blog={blog} />
           ))}
         </div>
-        <div className="text-center mt-16 text-gray-500">
-          <p>© 2024 Blog Website. All rights reserved.</p>
-        </div>
       </div>
     </div>
   );
+}
+
+export async function generateMetadata() {
+  return {
+    title: "STORIES - Home",
+    description: "Share your stories with me",
+    openGraph: {
+      title: "STORIES - Home",
+      description: "Share your stories with me"
+    }
+  };
 }

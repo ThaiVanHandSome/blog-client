@@ -3,31 +3,35 @@ export const API_URL =
 
 export const API_ENDPOINTS = {
   AUTH: {
-    REGISTER: `${API_URL}/auth/register`,
-    VERIFY_REGISTRATION: `${API_URL}/auth/verify-registration`,
-    LOGIN: `${API_URL}/auth/login`,
-    LOGOUT: `${API_URL}/auth/logout`,
-    ME: `${API_URL}/auth/me`,
-    SEND_EMAIL_FORGOT_PASSWORD: `${API_URL}/auth/forgot-password-token`,
-    VERIFY_FORGOT_PASSWORD_TOKEN: `${API_URL}/auth/verify-forgot-password-token`,
-    RESET_PASSWORD: `${API_URL}/auth/reset-password`,
+    REGISTER: `${API_URL}/api/auth/register`,
+    VERIFY_REGISTRATION: `${API_URL}/api/auth/verify-registration`,
+    LOGIN: `${API_URL}/api/auth/login`,
+    LOGOUT: `${API_URL}/api/auth/logout`,
+    ME: `${API_URL}/api/auth/me`,
+    SEND_EMAIL_FORGOT_PASSWORD: `${API_URL}/api/auth/forgot-password-token`,
+    VERIFY_FORGOT_PASSWORD_TOKEN: `${API_URL}/api/auth/verify-forgot-password-token`,
+    RESET_PASSWORD: `${API_URL}/api/auth/reset-password`
   },
   BLOG: {
-    GET_ALL: `${API_URL}/blogs`,
-    CREATE: `${API_URL}/blogs/create`,
-    GET_BY_ID: (id: string) => `${API_URL}/blogs/${id}`,
-    TOGGLE_LIKE: (id: string) => `${API_URL}/blogs/${id}/toggle-like`,
+    GET_ALL: `${API_URL}/api/blogs`,
+    CREATE: `${API_URL}/api/blogs/create`,
+    GET_BY_ID: (id: string) => `${API_URL}/api/blogs/${id}`,
+    TOGGLE_LIKE: (id: string) => `${API_URL}/api/blogs/${id}/toggle-like`
   },
   LIKE: {
-    CHECK_LIKED: (blogId: string) => `${API_URL}/likes/check?blogId=${blogId}`,
+    CHECK_LIKED: (blogId: string) =>
+      `${API_URL}/api/likes/check?blogId=${blogId}`
   },
   COMMENT: {
-    CREATE: `${API_URL}/comments`,
-    GET_BY_BLOG: (blogId: string) => `${API_URL}/comments/blog/${blogId}`,
-    DELETE: (commentId: string) => `${API_URL}/comments/${commentId}`,
-    UPDATE: (commentId: string) => `${API_URL}/comments/${commentId}`,
+    CREATE: `${API_URL}/api/comments`,
+    GET_BY_BLOG: (blogId: string) => `${API_URL}/api/comments/blog/${blogId}`,
+    DELETE: (commentId: string) => `${API_URL}/api/comments/${commentId}`,
+    UPDATE: (commentId: string) => `${API_URL}/api/comments/${commentId}`
   },
   NOTIFICATIONS: {
-    GET_ALL: `${API_URL}/notifications`,
+    GET_ALL: `${API_URL}/api/notifications`
   },
+  UPLOAD: {
+    CREATE: "${API_URL}/api/cloudinary/upload"
+  }
 };

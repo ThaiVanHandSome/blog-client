@@ -1,8 +1,13 @@
-name: Check pull request
+name: Initial check
 
 on:
+  push:
+    branches-ignore:
+      - master
+
   pull_request:
-    branches: [master]
+    branches-ignore:
+      - master
 
 jobs:
   all-checks:

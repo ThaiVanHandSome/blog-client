@@ -5,16 +5,25 @@ import userEvent from "@testing-library/user-event";
 import { server } from "@/mocks/node";
 import { http, HttpResponse } from "msw";
 import { API_ENDPOINTS } from "@/constants/api";
+import ReactQueryProvider from "@/providers/ReactQueryProvider";
 
 describe("Like Button", () => {
   it("render component", () => {
-    render(<LikeButton blogId="test" initialLikes={1} isLiked={false} />);
+    render(
+      <ReactQueryProvider>
+        <LikeButton blogId="test" initialLikes={1} isLiked={false} />
+      </ReactQueryProvider>
+    );
 
     expect(screen.queryByText("1")).toBeInTheDocument();
   });
 
   it("update likes when like", async () => {
-    render(<LikeButton blogId="test" initialLikes={2} isLiked={false} />);
+    render(
+      <ReactQueryProvider>
+        <LikeButton blogId="test" initialLikes={2} isLiked={false} />
+      </ReactQueryProvider>
+    );
 
     expect(screen.queryByRole("button")).toHaveTextContent("2");
     expect(screen.queryByRole("button")).toHaveAttribute(
@@ -44,7 +53,11 @@ describe("Like Button", () => {
       })
     );
 
-    render(<LikeButton blogId="test" initialLikes={2} isLiked={false} />);
+    render(
+      <ReactQueryProvider>
+        <LikeButton blogId="test" initialLikes={2} isLiked={false} />
+      </ReactQueryProvider>
+    );
 
     expect(screen.queryByRole("button")).toHaveTextContent("2");
     expect(screen.queryByRole("button")).toHaveAttribute(

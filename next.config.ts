@@ -2,10 +2,10 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    domains: ["images.unsplash.com", "res.cloudinary.com"],
+    domains: ["images.unsplash.com", "res.cloudinary.com"]
   },
   unstable_includeFiles: [
-    'node_modules/next/dist/compiled/@edge-runtime/primitives/**/*.+(js|json)',
+    "node_modules/next/dist/compiled/@edge-runtime/primitives/**/*.+(js|json)"
   ],
   theme: {
     extends: {
@@ -19,11 +19,14 @@ const nextConfig: NextConfig = {
           600: "#1175b8",
           700: "#0f5e95",
           800: "#10507c",
-          900: "#134367",
+          900: "#134367"
         },
-      },
-    },
-  },
+        bPurple: {
+          500: "#9400d3"
+        }
+      }
+    }
+  }
 };
 
 export default nextConfig;

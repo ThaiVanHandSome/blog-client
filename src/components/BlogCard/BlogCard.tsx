@@ -20,13 +20,13 @@ export default function BlogCard({ blog }: Readonly<BlogCardProps>) {
     return d.toLocaleDateString("en-US", {
       month: "short",
       day: "2-digit",
-      year: "numeric",
+      year: "numeric"
     });
   })();
 
   const initials = blog.author?.name
     ?.split(" ")
-    .map((n) => n[0])
+    .map(n => n[0])
     .slice(0, 2)
     .join("")
     .toUpperCase();
@@ -35,9 +35,9 @@ export default function BlogCard({ blog }: Readonly<BlogCardProps>) {
     <Link
       href={`/blogs/${buildBlogSlug(blog.title, blog._id)}`}
       prefetch={false}
-      className="group block w-full focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-200"
+      className="group block w-full focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-200 bg-white rounded-md"
     >
-      <article className="w-full relative overflow-hidden border-b border-gray-200 transition-colors duration-150 hover:bg-gray-50">
+      <article className="w-full relative overflow-hidden transition-colors duration-150 ">
         <div className="flex items-stretch gap-4 p-3 md:p-4">
           {/* Thumbnail (Compact Full-Width Row) */}
           <div className="relative h-24 w-36 md:h-28 md:w-44 shrink-0 overflow-hidden rounded-md">
