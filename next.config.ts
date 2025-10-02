@@ -1,7 +1,5 @@
 import type { NextConfig } from "next";
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-
 const nextConfig: NextConfig = {
   images: {
     domains: ["images.unsplash.com", "res.cloudinary.com"]
