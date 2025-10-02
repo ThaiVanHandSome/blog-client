@@ -7,17 +7,27 @@ export function middleware(request: NextRequest) {
 
   const { pathname } = request.nextUrl;
 
+  const protectesRoutes = ["/blog/create"];
+
+  if (pathname.startsWith("/auth/register"))
+    return NextResponse.redirect(new URL("/auth/login", request.url));
+
   if (accessToken && pathname.startsWith("/auth")) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 
-  if (!accessToken && !pathname.startsWith("/auth")) {
-    return NextResponse.redirect(new URL("/auth/login", request.url));
+  if (!accessToken) {
+    if (
+      protectesRoutes.some(route => pathname.startsWith(route)) &&
+      !pathname.startsWith("/auth")
+    ) {
+      return NextResponse.redirect(new URL("/auth/login", request.url));
+    }
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico|.*\\..*).*)"],
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico|.*\\..*).*)"]
 };

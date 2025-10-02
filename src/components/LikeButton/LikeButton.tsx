@@ -5,6 +5,8 @@ import { Heart } from "lucide-react";
 import { API_ENDPOINTS } from "@/constants/api";
 import { fetchApi } from "@/utils/fetchApi";
 import { DataResponse } from "@/types/http.type";
+import { useAuth } from "@/hooks";
+import { useRouter } from "next/navigation";
 
 type LikeButtonProps = {
   blogId: string;
@@ -21,8 +23,12 @@ export default function LikeButton({
   const [isPending, startTransition] = useTransition();
   const [liked, setLiked] = useState<boolean>(isLiked);
 
+  const { isAuthenticated } = useAuth();
+  const router = useRouter();
+
   async function handleLike() {
     if (isPending) return;
+    if (!isAuthenticated) return router.push("/auth/login");
     const optimisticLikes = liked ? likes - 1 : likes + 1;
     setLiked(v => !v);
     setLikes(optimisticLikes);

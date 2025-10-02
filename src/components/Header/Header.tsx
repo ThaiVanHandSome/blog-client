@@ -113,7 +113,7 @@ const Header = () => {
                     Sign In
                   </Button>
                 </Link>
-                <Link href="/auth/register">
+                <Link className="hidden" href="/auth/register">
                   <Button size="sm">Sign Up</Button>
                 </Link>
               </div>
@@ -179,7 +179,7 @@ const Header = () => {
                   </Link>
                   <Link
                     href="/auth/register"
-                    className="px-4 py-2 bg-blue-600 text-white hover:bg-blue-700 rounded transition-colors duration-200"
+                    className="px-4 py-2 bg-blue-600 text-white hover:bg-blue-700 rounded transition-colors duration-200 hidden"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     Sign Up

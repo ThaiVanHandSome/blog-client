@@ -84,12 +84,12 @@ export default function CreateBlogPage() {
     const imgs = data.content.match(imageRegex) || [];
 
     for (const imageTag of imgs) {
-      const base64 = imageTag.match(/src="([^"]+)"/)[1];
+      const base64 = (imageTag as any)?.match(/src="([^"]+)"/)[1];
       const file = dataURLtoFile(base64, `image-${Date.now()}`);
       const uploadFormData = new FormData();
       uploadFormData.append("file", file);
       const res = await createImageMutation.mutateAsync(uploadFormData);
-      const url = res?.data.url;
+      const url = (res as any)?.data.url;
       data.content = data.content.replace(base64, url);
     }
 

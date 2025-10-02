@@ -40,3 +40,14 @@ export default async function HomePage() {
     </div>
   );
 }
+
+export async function generateMetadata() {
+  return {
+    title: "STORIES - Home",
+    description: "Share your stories with me",
+    openGraph: {
+      title: "STORIES - Home",
+      description: "Share your stories with me"
+    }
+  };
+}

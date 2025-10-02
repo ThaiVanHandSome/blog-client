@@ -1,4 +1,4 @@
-import { extractIdFromSlug } from "@/lib/utils";
+import { buildBlogSlug, extractIdFromSlug } from "@/lib/utils";
 import { API_ENDPOINTS } from "@/constants/api";
 import { notFound } from "next/navigation";
 import Image from "next/image";
@@ -40,6 +40,22 @@ async function checkLiked(blogId: string) {
   if (!res.ok) return false;
   const data = await res.json();
   return data.data as boolean;
+}
+
+export async function generateStaticParams() {
+  const blogsRes = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.BLOG.GET_ALL}`
+  );
+  if (blogsRes.ok) {
+    const res = await blogsRes.json();
+    const data = res.data;
+
+    return data.map((blog: Blog) => ({
+      slug: buildBlogSlug(blog.title, blog._id)
+    }));
+  }
+
+  return [];
 }
 
 export default async function BlogDetailPage({
@@ -124,4 +140,27 @@ export default async function BlogDetailPage({
       </div>
     </main>
   );
+}
+
+export async function generateMetadata(props: {
+  params: Promise<{ slug: string }>;
+}) {
+  const params = await props.params;
+  const { slug } = params;
+  const id = extractIdFromSlug(slug);
+  const blog = await getBlogById(id as string);
+
+  const title = blog?.title;
+  const description = blog?.description;
+  const oImage = blog?.thumbnail;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images: oImage
+    }
+  };
 }
