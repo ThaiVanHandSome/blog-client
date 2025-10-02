@@ -29,5 +29,8 @@ export const API_ENDPOINTS = {
   },
   NOTIFICATIONS: {
     GET_ALL: `/api/notifications`
+  },
+  UPLOAD: {
+    CREATE: "/api/cloudinary/upload"
   }
 };

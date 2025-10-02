@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 import React, { useState, useRef, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { Upload } from "lucide-react";
+import { dataURLtoFile } from "@/utils/dataURLToFile";
 
 const Editor = dynamic(() => import("@/components/form/Editor"), {
   ssr: false,
@@ -59,7 +60,17 @@ export default function CreateBlogPage() {
 
   const router = useRouter();
 
-  const onSubmit = handleSubmit((data: BLogInput) => {
+  const createImageMutation = useMutation({
+    mutationFn: (data: FormData) =>
+      fetchApi({
+        url: API_ENDPOINTS.UPLOAD.CREATE,
+        method: "POST",
+        body: data,
+        showToastWhenSuccess: false
+      })
+  });
+
+  const onSubmit = handleSubmit(async (data: BLogInput) => {
     const formData = new FormData();
     formData.append("title", data.title);
     formData.append("description", data.description);
@@ -67,6 +78,21 @@ export default function CreateBlogPage() {
     if (file) {
       formData.append("file", file);
     }
+
+    // upload all images to the cloudinary (base64 -> URL)
+    const imageRegex = /<img[^>]+src="data:image\/[^">]+"[^>]*>/g;
+    const imgs = data.content.match(imageRegex) || [];
+
+    for (const imageTag of imgs) {
+      const base64 = imageTag.match(/src="([^"]+)"/)[1];
+      const file = dataURLtoFile(base64, `image-${Date.now()}`);
+      const uploadFormData = new FormData();
+      uploadFormData.append("file", file);
+      const res = await createImageMutation.mutateAsync(uploadFormData);
+      const url = res?.data.url;
+      data.content = data.content.replace(base64, url);
+    }
+
     formData.append(
       "content",
       `<div class="blog-content">${data.content}</div>`
