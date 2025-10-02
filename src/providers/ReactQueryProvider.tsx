@@ -23,8 +23,6 @@ export default function ReactQueryProvider({
       })
   );
   return (
-    <QueryClientProvider client={queryClient} contextSharing={true}>
-      {children}
-    </QueryClientProvider>
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
   );
 }
