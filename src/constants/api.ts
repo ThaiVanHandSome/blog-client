@@ -3,34 +3,35 @@ export const API_URL =
 
 export const API_ENDPOINTS = {
   AUTH: {
-    REGISTER: `/api/auth/register`,
-    VERIFY_REGISTRATION: `/api/auth/verify-registration`,
-    LOGIN: `/api/auth/login`,
-    LOGOUT: `/api/auth/logout`,
-    ME: `/api/auth/me`,
-    SEND_EMAIL_FORGOT_PASSWORD: `/api/auth/forgot-password-token`,
-    VERIFY_FORGOT_PASSWORD_TOKEN: `/api/auth/verify-forgot-password-token`,
-    RESET_PASSWORD: `/api/auth/reset-password`
+    REGISTER: `${API_URL}/api/auth/register`,
+    VERIFY_REGISTRATION: `${API_URL}/api/auth/verify-registration`,
+    LOGIN: `${API_URL}/api/auth/login`,
+    LOGOUT: `${API_URL}/api/auth/logout`,
+    ME: `${API_URL}/api/auth/me`,
+    SEND_EMAIL_FORGOT_PASSWORD: `${API_URL}/api/auth/forgot-password-token`,
+    VERIFY_FORGOT_PASSWORD_TOKEN: `${API_URL}/api/auth/verify-forgot-password-token`,
+    RESET_PASSWORD: `${API_URL}/api/auth/reset-password`
   },
   BLOG: {
-    GET_ALL: `/api/blogs`,
-    CREATE: `/api/blogs/create`,
-    GET_BY_ID: (id: string) => `/api/blogs/${id}`,
-    TOGGLE_LIKE: (id: string) => `/api/blogs/${id}/toggle-like`
+    GET_ALL: `${API_URL}/api/blogs`,
+    CREATE: `${API_URL}/api/blogs/create`,
+    GET_BY_ID: (id: string) => `${API_URL}/api/blogs/${id}`,
+    TOGGLE_LIKE: (id: string) => `${API_URL}/api/blogs/${id}/toggle-like`
   },
   LIKE: {
-    CHECK_LIKED: (blogId: string) => `/api/likes/check?blogId=${blogId}`
+    CHECK_LIKED: (blogId: string) =>
+      `${API_URL}/api/likes/check?blogId=${blogId}`
   },
   COMMENT: {
-    CREATE: `/api/comments`,
-    GET_BY_BLOG: (blogId: string) => `/api/comments/blog/${blogId}`,
-    DELETE: (commentId: string) => `/api/comments/${commentId}`,
-    UPDATE: (commentId: string) => `/api/comments/${commentId}`
+    CREATE: `${API_URL}/api/comments`,
+    GET_BY_BLOG: (blogId: string) => `${API_URL}/api/comments/blog/${blogId}`,
+    DELETE: (commentId: string) => `${API_URL}/api/comments/${commentId}`,
+    UPDATE: (commentId: string) => `${API_URL}/api/comments/${commentId}`
   },
   NOTIFICATIONS: {
-    GET_ALL: `/api/notifications`
+    GET_ALL: `${API_URL}/api/notifications`
   },
   UPLOAD: {
-    CREATE: "/api/cloudinary/upload"
+    CREATE: "${API_URL}/api/cloudinary/upload"
   }
 };
