@@ -11,9 +11,9 @@ import { fetchApi } from "@/utils/fetchApi";
 import { API_ENDPOINTS } from "@/constants/api";
 import { useMutation } from "@tanstack/react-query";
 import { NotificationBell } from "@/components/NotificationBell";
+import Image from "next/image";
 
 const Header = () => {
-  const [scrolled, setScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { user, isLoading, isAuthenticated, clearAuthCache } = useAuth();
 
@@ -23,8 +23,8 @@ const Header = () => {
     mutationFn: () =>
       fetchApi({
         url: API_ENDPOINTS.AUTH.LOGOUT,
-        method: "POST",
-      }),
+        method: "POST"
+      })
   });
 
   const handleLogout = async () => {
@@ -32,44 +32,40 @@ const Header = () => {
       onSuccess: () => {
         clearAuthCache();
         router.push("/auth/login");
-      },
+      }
     });
   };
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
   return (
     <header
-      className={`sticky top-0 z-50 w-full transition-all duration-300 ${
-        scrolled ? "bg-white shadow-md border-b border-gray-200" : "bg-white"
-      }`}
+      className={`sticky top-3 bg-white z-50 w-full transition-all duration-300 container max-w-[80%] mx-auto border border-gray-300 rounded-2xl`}
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2">
-            <div className="bg-blue-600 text-white px-3 py-2 rounded font-bold text-lg">
-              ThaiVan Blog
-            </div>
-          </Link>
+          <div className="flex items-center gap-8">
+            <Link href="/" className="flex items-center space-x-2">
+              <Image
+                src="/assets/images/logo.jpg"
+                alt="logo"
+                width={60}
+                height={60}
+              />
+              <p className="font-bold text-lg font-display">Memories</p>
+            </Link>
 
-          {/* Navigation */}
-          <nav className="hidden md:flex items-center space-x-6">
-            {isAuthenticated && (
-              <Link
-                href="/blogs/create"
-                className="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200"
-              >
-                Create Blog
-              </Link>
-            )}
-          </nav>
+            {/* Navigation */}
+            <nav className="hidden md:flex items-center space-x-6">
+              {isAuthenticated && (
+                <Link
+                  href="/blogs/create"
+                  className="bg-purple-600 text-white px-4 py-1 rounded-2xl font-medium transition-colors duration-200 text-sm"
+                >
+                  Create Blog
+                </Link>
+              )}
+            </nav>
+          </div>
 
           {/* User Profile */}
           <div className="flex items-center space-x-4">
@@ -86,14 +82,7 @@ const Header = () => {
               // Authenticated state
               <>
                 <NotificationBell />
-                <button
-                  type="button"
-                  aria-label="Sign out"
-                  onClick={handleLogout}
-                  className="p-2 rounded hover:bg-gray-100 text-gray-700"
-                >
-                  <LogOutIcon />
-                </button>
+
                 <div className="hidden sm:block text-right">
                   <span className="text-sm font-medium text-gray-700">
                     {user.name}
@@ -106,6 +95,15 @@ const Header = () => {
                     {user.name}
                   </AvatarFallback>
                 </Avatar>
+
+                <button
+                  type="button"
+                  aria-label="Sign out"
+                  onClick={handleLogout}
+                  className="p-2 rounded hover:bg-gray-100 text-gray-700"
+                >
+                  <LogOutIcon className="size-5" strokeWidth={1.25} />
+                </button>
               </>
             ) : (
               // Not authenticated state

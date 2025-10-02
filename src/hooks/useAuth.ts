@@ -16,7 +16,7 @@ export const useAuth = () => {
     refetch,
     isError,
     isSuccess,
-    isFetching,
+    isFetching
   } = useQuery({
     queryKey: ["auth", "me"],
     queryFn: async (): Promise<MeResponse> => {
@@ -24,7 +24,7 @@ export const useAuth = () => {
         url: API_ENDPOINTS.AUTH.ME,
         method: "GET",
         showToastWhenSuccess: false,
-        showToastWhenError: false,
+        showToastWhenError: false
       });
       return result.data;
     },
@@ -34,7 +34,7 @@ export const useAuth = () => {
     gcTime: 10 * 60 * 1000, // 10 minutes (formerly cacheTime)
     refetchOnWindowFocus: false,
     refetchOnMount: true,
-    refetchOnReconnect: true,
+    refetchOnReconnect: true
   });
 
   const clearAuthCache = () => {
@@ -50,6 +50,6 @@ export const useAuth = () => {
     isSuccess,
     isFetching,
     clearAuthCache,
-    isAuthenticated: !!user,
+    isAuthenticated: !!user
   };
 };

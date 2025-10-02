@@ -73,7 +73,7 @@ export default function CommentItem({
       <div className="flex-1">
         <div className="flex items-center gap-2 mb-2">
           <span className="font-medium text-gray-900">{comment.user.name}</span>
-          <span className="text-sm text-gray-500">
+          <span className="text-xs text-gray-500">
             {formatDate(comment.createdAt)}
           </span>
 
@@ -106,7 +106,7 @@ export default function CommentItem({
             setStartEditing={setStartEditing}
           />
         ) : (
-          <p className="text-gray-700 whitespace-pre-wrap ">
+          <p className="text-gray-700 whitespace-pre-wrap font-display text-sm">
             {comment.content}
           </p>
         )}

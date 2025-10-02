@@ -21,7 +21,7 @@ export async function fetchApi<T>({
   headers = {},
   cache,
   showToastWhenSuccess = true,
-  showToastWhenError = true,
+  showToastWhenError = true
 }: FetchOptions<T>): Promise<T> {
   try {
     const isFormData = body instanceof FormData;
@@ -32,7 +32,7 @@ export async function fetchApi<T>({
         ? headers // FormData → avoid losing boundary
         : {
             "Content-Type": "application/json",
-            ...headers,
+            ...headers
           },
       credentials: "include",
       body: body
@@ -40,7 +40,7 @@ export async function fetchApi<T>({
           ? (body as any)
           : JSON.stringify(body)
         : undefined,
-      cache,
+      cache
     });
 
     const data = await res.json();

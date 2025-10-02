@@ -7,13 +7,16 @@ const getBlogs = async () => {
   try {
     const cookieHeader = (await cookies()).toString();
 
-    const blogsRes = await fetch(API_ENDPOINTS.BLOG.GET_ALL, {
-      method: "GET",
-      headers: {
-        Cookie: cookieHeader
-      },
-      cache: "no-store"
-    });
+    const blogsRes = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.BLOG.GET_ALL}`,
+      {
+        method: "GET",
+        headers: {
+          Cookie: cookieHeader
+        },
+        cache: "no-store"
+      }
+    );
 
     return blogsRes.json();
   } catch (error) {
@@ -27,14 +30,11 @@ export default async function HomePage() {
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="space-y-4">
           {blogs.map(blog => (
             <BlogCard key={blog._id} blog={blog} />
           ))}
-        </div>
-        <div className="text-center mt-16 text-gray-500">
-          <p>© 2024 Blog Website. All rights reserved.</p>
         </div>
       </div>
     </div>

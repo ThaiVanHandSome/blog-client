@@ -21,7 +21,7 @@ const Editor = dynamic(() => import("@/components/form/Editor"), {
     <div className="w-full h-64 bg-gray-100 rounded-lg animate-pulse flex items-center justify-center">
       <p className="text-gray-500">Loading editor...</p>
     </div>
-  ),
+  )
 }) as any;
 
 const DEFAULT_VALUES: BLogInput = {
@@ -29,7 +29,7 @@ const DEFAULT_VALUES: BLogInput = {
   description: "",
   topic: "",
   thumbnail: "",
-  content: "",
+  content: ""
 };
 
 export default function CreateBlogPage() {
@@ -42,10 +42,10 @@ export default function CreateBlogPage() {
     control,
     handleSubmit,
     setValue,
-    formState: { errors },
+    formState: { errors }
   } = useForm<BLogInput>({
     defaultValues: DEFAULT_VALUES,
-    resolver: zodResolver(blogSchema),
+    resolver: zodResolver(blogSchema)
   });
 
   const createBlogMutation = useMutation({
@@ -53,8 +53,8 @@ export default function CreateBlogPage() {
       fetchApi({
         url: API_ENDPOINTS.BLOG.CREATE,
         method: "POST",
-        body: data,
-      }),
+        body: data
+      })
   });
 
   const router = useRouter();
@@ -67,11 +67,14 @@ export default function CreateBlogPage() {
     if (file) {
       formData.append("file", file);
     }
-    formData.append("content", data.content);
+    formData.append(
+      "content",
+      `<div class="blog-content">${data.content}</div>`
+    );
     createBlogMutation.mutate(formData, {
       onSuccess: () => {
         router.push("/");
-      },
+      }
     });
   });
 
@@ -79,7 +82,7 @@ export default function CreateBlogPage() {
     (file: File) => {
       if (file && file.type.startsWith("image/")) {
         const reader = new FileReader();
-        reader.onload = (e) => {
+        reader.onload = e => {
           const result = e.target?.result as string;
           setPreviewImage(result);
           setValue("thumbnail", result);
@@ -253,13 +256,13 @@ export default function CreateBlogPage() {
                   onDrop={handleDrop}
                   onClick={openFileDialog}
                   tabIndex={0}
-                  onKeyDown={(e) => {
+                  onKeyDown={e => {
                     if (e.key === "Enter" || e.key === " ") {
                       e.preventDefault();
                       openFileDialog();
                     }
                   }}
-                  onKeyUp={(e) => {
+                  onKeyUp={e => {
                     if (e.key === "Enter" || e.key === " ") {
                       e.preventDefault();
                       openFileDialog();
@@ -312,12 +315,12 @@ export default function CreateBlogPage() {
             </div>
 
             {/* Submit Button - full width */}
-            <div className="lg:col-span-2 pt-6 border-t border-gray-200">
+            <div className="col-span-full pt-6 border-t border-gray-200 flex items-center justify-center">
               <LoadingButton
                 type="submit"
                 isLoading={createBlogMutation.isPending}
                 loadingText="Creating blog post..."
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 text-lg font-semibold rounded-xl transition-colors duration-200"
+                className=" bg-blue-600 hover:bg-blue-700 text-white py-4 text-sm font-semibold rounded-xl transition-colors duration-200 cursor-pointer px-8 py-2"
               >
                 Create Blog Post
               </LoadingButton>
