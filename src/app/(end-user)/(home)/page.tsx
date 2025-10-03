@@ -10,6 +10,7 @@ export default async function HomePage() {
     method: "GET",
     includeCookies: false
   });
+  console.log(data);
   const blogs = data.data;
 
   return (

@@ -7,6 +7,8 @@ import { API_ENDPOINTS } from "@/constants/api";
 import { fetchApiServer } from "@/utils/fetchApiServer";
 import { DataResponse } from "@/types/http.type";
 
+export const dynamic = "force-dynamic";
+
 export default async function MyBlogsPage() {
   const data = await fetchApiServer<DataResponse<Blog[]>>({
     url: API_ENDPOINTS.BLOG.GET_OWN_BLOGS,

@@ -7,6 +7,8 @@ import MyBlogCard from "@/components/BlogCard/MyBlogCard";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminBlogsPage() {
   const res = await fetchApiServer<DataResponse<Blog[]>>({
     url: API_ENDPOINTS.BLOG.GET_ALL,

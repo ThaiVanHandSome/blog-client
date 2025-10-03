@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ApiError } from "next/dist/server/api-utils";
+// import { ApiError } from "next/dist/server/api-utils";
 import { cookies } from "next/headers";
 
 type FetchOptions<T> = {
@@ -27,7 +27,7 @@ export async function fetchApiServer<T>({
     const res = await fetch(url, {
       method,
       headers: {
-        Cookie: cookieHeader,
+        ...(includeCookies && { Cookie: cookieHeader }),
         ...(isFormData
           ? headers // nếu là FormData thì không set Content-Type
           : {
@@ -52,15 +52,17 @@ export async function fetchApiServer<T>({
     if (!res.ok) {
       const message =
         (data as any)?.message || `Request failed with status ${res.status}`;
-      throw new ApiError(res.status, message);
+      console.error(message);
+      return null as T;
     }
 
     return data as T;
   } catch (error) {
     console.error("❌ [fetchApiServer] Error:", error);
     if (error instanceof TypeError && error.message === "fetch failed") {
-      throw new Error("Network error: Failed to connect to server");
+      console.error("Network error: Failed to connect to server");
     }
-    throw error;
+    console.error((error as any)?.message ?? "Internal server error");
+    return null as T;
   }
 }
