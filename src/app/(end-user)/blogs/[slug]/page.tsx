@@ -12,7 +12,8 @@ import { DataResponse } from "@/types/http.type";
 async function getBlogById(id: string): Promise<Blog | null> {
   const data = await fetchApiServer<DataResponse<Blog>>({
     url: API_ENDPOINTS.BLOG.GET_BY_ID(id),
-    method: "GET"
+    method: "GET",
+    includeCookies: false
   });
   return data.data;
 }

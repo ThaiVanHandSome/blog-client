@@ -7,7 +7,8 @@ import { fetchApiServer } from "@/utils/fetchApiServer";
 export default async function HomePage() {
   const data = await fetchApiServer<DataResponse<Blog[]>>({
     url: API_ENDPOINTS.BLOG.GET_ALL,
-    method: "GET"
+    method: "GET",
+    includeCookies: false
   });
   const blogs = data.data;
 
