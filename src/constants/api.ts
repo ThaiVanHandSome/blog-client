@@ -16,7 +16,11 @@ export const API_ENDPOINTS = {
     GET_ALL: `${API_URL}/api/blogs`,
     CREATE: `${API_URL}/api/blogs/create`,
     GET_BY_ID: (id: string) => `${API_URL}/api/blogs/${id}`,
-    TOGGLE_LIKE: (id: string) => `${API_URL}/api/blogs/${id}/toggle-like`
+    UPDATE_BY_ID: (id: string) => `${API_URL}/api/blogs/${id}`,
+    DELETE_BY_ID: (id: string) => `${API_URL}/api/blogs/${id}`,
+    TOGGLE_LIKE: (id: string) => `${API_URL}/api/blogs/${id}/toggle-like`,
+    GET_OWN_BLOGS: `${API_URL}/api/blogs/own`,
+    GET_OWN_BLOG_BY_ID: (id: string) => `${API_URL}/api/blogs/own/${id}`
   },
   LIKE: {
     CHECK_LIKED: (blogId: string) =>
@@ -33,5 +37,10 @@ export const API_ENDPOINTS = {
   },
   UPLOAD: {
     CREATE: `${API_URL}/api/cloudinary/upload`
+  },
+  ADMIN: {
+    AUTH: {
+      LOGIN: `${API_URL}/api/auth/login/admin`
+    }
   }
 };

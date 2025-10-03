@@ -37,7 +37,7 @@ export default function VerifyTokenDialog({ type }: VerifyTokenProps) {
 
   const router = useRouter();
 
-  const [isOpen] = useAtom(verifyTokenDialogAtom);
+  const [isOpen, setIsOpen] = useAtom(verifyTokenDialogAtom);
 
   const verifyRegistrationMutation = useMutation({
     mutationFn: (body: { token: string }) =>
@@ -66,6 +66,7 @@ export default function VerifyTokenDialog({ type }: VerifyTokenProps) {
         case TOKEN_TYPE_ENUM.FORGOT_PASSWORD:
           return verifyForgotPasswordMutation.mutate(body, {
             onSuccess: () => {
+              setIsOpen(false);
               router.push(`/auth/reset-password?token=${data.token}`);
             }
           });
@@ -73,6 +74,7 @@ export default function VerifyTokenDialog({ type }: VerifyTokenProps) {
         case TOKEN_TYPE_ENUM.REGISTRATION:
           return verifyRegistrationMutation.mutate(body, {
             onSuccess: () => {
+              setIsOpen(false);
               router.push("/auth/login");
             }
           });

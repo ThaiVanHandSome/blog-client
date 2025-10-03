@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Merriweather } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/Header";
 import { Toaster } from "@/components/ui/sonner";
 import ReactQueryProvider from "@/providers/ReactQueryProvider";
 
@@ -40,7 +39,6 @@ export default function RootLayout({
           className={`${fontSerif.variable} ${fontDisplay.variable} antialiased`}
         >
           <>
-            <Header />
             {children}
             <Toaster />
           </>

@@ -13,6 +13,13 @@ import { useMutation } from "@tanstack/react-query";
 import { NotificationBell } from "@/components/NotificationBell";
 import Image from "next/image";
 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu";
+
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { user, isLoading, isAuthenticated, clearAuthCache } = useAuth();
@@ -58,7 +65,7 @@ const Header = () => {
             <nav className="hidden md:flex items-center space-x-6">
               {isAuthenticated && (
                 <Link
-                  href="/blogs/create"
+                  href="/blogs/actions/new"
                   className="bg-purple-600 text-white px-4 py-1 rounded-2xl font-medium transition-colors duration-200 text-sm"
                 >
                   Create Blog
@@ -90,11 +97,23 @@ const Header = () => {
                   <div className="text-xs text-gray-500">Welcome back!</div>
                 </div>
 
-                <Avatar className="h-9 w-9 border-2 border-gray-200">
-                  <AvatarFallback className="bg-blue-600 text-white font-semibold">
-                    {user.name}
-                  </AvatarFallback>
-                </Avatar>
+                <DropdownMenu>
+                  <DropdownMenuTrigger>
+                    <Avatar className="h-9 w-9 border-2 border-gray-200">
+                      <AvatarFallback className="bg-bPurple-500 text-white font-semibold">
+                        {user.name}
+                      </AvatarFallback>
+                    </Avatar>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuItem>
+                      <Link href="/profile">Profile</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Link href="/my-blogs">My blogs</Link>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
 
                 <button
                   type="button"
@@ -154,7 +173,7 @@ const Header = () => {
               </Link>
               {isAuthenticated && (
                 <Link
-                  href="/blogs/create"
+                  href="/blogs/actions/new"
                   className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded transition-colors duration-200"
                   onClick={() => setIsMenuOpen(false)}
                 >

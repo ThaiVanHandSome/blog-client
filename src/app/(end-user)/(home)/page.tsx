@@ -1,29 +1,15 @@
-import { cookies } from "next/headers";
 import BlogCard from "@/components/BlogCard";
 import { API_ENDPOINTS } from "@/constants/api";
 import { Blog } from "@/types/blog.type";
-
-const getBlogs = async () => {
-  try {
-    const cookieHeader = (await cookies()).toString();
-
-    const blogsRes = await fetch(`${API_ENDPOINTS.BLOG.GET_ALL}`, {
-      method: "GET",
-      headers: {
-        Cookie: cookieHeader
-      },
-      cache: "no-store"
-    });
-
-    return blogsRes.json();
-  } catch (error) {
-    throw error;
-  }
-};
+import { DataResponse } from "@/types/http.type";
+import { fetchApiServer } from "@/utils/fetchApiServer";
 
 export default async function HomePage() {
-  const data = await getBlogs();
-  const blogs = data.data as Blog[];
+  const data = await fetchApiServer<DataResponse<Blog[]>>({
+    url: API_ENDPOINTS.BLOG.GET_ALL,
+    method: "GET"
+  });
+  const blogs = data.data;
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -40,10 +26,10 @@ export default async function HomePage() {
 
 export async function generateMetadata() {
   return {
-    title: "STORIES - Home",
+    title: "Memories - Home",
     description: "Share your stories with me",
     openGraph: {
-      title: "STORIES - Home",
+      title: "Memories - Home",
       description: "Share your stories with me"
     }
   };

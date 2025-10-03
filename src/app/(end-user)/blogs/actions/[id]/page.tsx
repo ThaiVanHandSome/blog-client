@@ -11,10 +11,12 @@ import { fetchApi } from "@/utils/fetchApi";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import React, { useState, useRef, useCallback } from "react";
+import React, { useState, useRef, useCallback, use, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Upload } from "lucide-react";
 import { dataURLtoFile } from "@/utils/dataURLToFile";
+import { DataResponse } from "@/types/http.type";
+import { Blog } from "@/types/blog.type";
 
 const Editor = dynamic(() => import("@/components/form/Editor"), {
   ssr: false,
@@ -33,7 +35,14 @@ const DEFAULT_VALUES: BLogInput = {
   content: ""
 };
 
-export default function CreateBlogPage() {
+export default function ActionBlogPage({
+  params
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = use(params);
+  const isUpdate = id !== "new";
+
   const [previewImage, setPreviewImage] = useState<string>("");
   const [isDragOver, setIsDragOver] = useState(false);
   const [file, setFile] = useState<File | null>(null);
@@ -43,11 +52,34 @@ export default function CreateBlogPage() {
     control,
     handleSubmit,
     setValue,
-    formState: { errors }
+    formState: { errors },
+    reset
   } = useForm<BLogInput>({
     defaultValues: DEFAULT_VALUES,
     resolver: zodResolver(blogSchema)
   });
+
+  useEffect(() => {
+    const getBlog = async () => {
+      const data = await fetchApi<DataResponse<Blog>>({
+        url: API_ENDPOINTS.BLOG.GET_OWN_BLOG_BY_ID(id),
+        method: "GET",
+        showToastWhenSuccess: false
+      });
+      const blog = data.data;
+      reset({
+        title: blog.title,
+        description: blog.description,
+        topic: blog.topic,
+        thumbnail: blog.thumbnail,
+        content: blog.content
+      });
+      setPreviewImage(blog.thumbnail);
+    };
+    if (isUpdate) {
+      getBlog();
+    }
+  }, [id, isUpdate, reset]);
 
   const createBlogMutation = useMutation({
     mutationFn: (data: FormData) =>
@@ -58,16 +90,42 @@ export default function CreateBlogPage() {
       })
   });
 
-  const router = useRouter();
-
-  const createImageMutation = useMutation({
+  const updateBlogMutation = useMutation({
     mutationFn: (data: FormData) =>
       fetchApi({
-        url: API_ENDPOINTS.UPLOAD.CREATE,
-        method: "POST",
-        body: data,
-        showToastWhenSuccess: false
+        url: API_ENDPOINTS.BLOG.UPDATE_BY_ID(id),
+        method: "PATCH",
+        body: data
       })
+  });
+
+  const router = useRouter();
+
+  const uploadImagesMutation = useMutation({
+    mutationFn: async (content: string) => {
+      const imageRegex = /<img[^>]+src="data:image\/[^">]+"[^>]*>/g;
+      const imgs = content.match(imageRegex) || [];
+      let newContent = content;
+
+      for (const imageTag of imgs) {
+        const base64 = imageTag.match(/src="([^"]+)"/)?.[1];
+        if (!base64) continue;
+        const file = dataURLtoFile(base64, `image-${Date.now()}`);
+        const uploadFormData = new FormData();
+        uploadFormData.append("file", file);
+
+        const res = await fetchApi({
+          url: API_ENDPOINTS.UPLOAD.CREATE,
+          method: "POST",
+          body: uploadFormData,
+          showToastWhenSuccess: false
+        });
+        const url = (res as any)?.data.url;
+        newContent = newContent.replace(base64, url);
+      }
+
+      return newContent;
+    }
   });
 
   const onSubmit = handleSubmit(async (data: BLogInput) => {
@@ -79,29 +137,23 @@ export default function CreateBlogPage() {
       formData.append("file", file);
     }
 
-    // upload all images to the cloudinary (base64 -> URL)
-    const imageRegex = /<img[^>]+src="data:image\/[^">]+"[^>]*>/g;
-    const imgs = data.content.match(imageRegex) || [];
+    const newContent = await uploadImagesMutation.mutateAsync(data.content);
 
-    for (const imageTag of imgs) {
-      const base64 = (imageTag as any)?.match(/src="([^"]+)"/)[1];
-      const file = dataURLtoFile(base64, `image-${Date.now()}`);
-      const uploadFormData = new FormData();
-      uploadFormData.append("file", file);
-      const res = await createImageMutation.mutateAsync(uploadFormData);
-      const url = (res as any)?.data.url;
-      data.content = data.content.replace(base64, url);
+    formData.append("content", `<div class="blog-content">${newContent}</div>`);
+
+    if (!isUpdate) {
+      createBlogMutation.mutate(formData, {
+        onSuccess: () => {
+          router.push("/");
+        }
+      });
+    } else {
+      updateBlogMutation.mutate(formData, {
+        onSuccess: () => {
+          router.push("/my-blogs");
+        }
+      });
     }
-
-    formData.append(
-      "content",
-      `<div class="blog-content">${data.content}</div>`
-    );
-    createBlogMutation.mutate(formData, {
-      onSuccess: () => {
-        router.push("/");
-      }
-    });
   });
 
   const handleFileSelect = useCallback(
@@ -168,11 +220,13 @@ export default function CreateBlogPage() {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Create New Blog Post
+            {isUpdate ? "Update blog" : "Create New Blog"}
           </h1>
-          <p className="text-gray-600">
-            Share your knowledge and experience with the community
-          </p>
+          {!isUpdate && (
+            <p className="text-gray-600">
+              Share your knowledge and experience with the community
+            </p>
+          )}
         </div>
 
         {/* Form */}
@@ -344,11 +398,15 @@ export default function CreateBlogPage() {
             <div className="col-span-full pt-6 border-t border-gray-200 flex items-center justify-center">
               <LoadingButton
                 type="submit"
-                isLoading={createBlogMutation.isPending}
-                loadingText="Creating blog post..."
-                className=" bg-blue-600 hover:bg-blue-700 text-white py-4 text-sm font-semibold rounded-xl transition-colors duration-200 cursor-pointer px-8 py-2"
+                isLoading={
+                  createBlogMutation.isPending ||
+                  uploadImagesMutation.isPending ||
+                  updateBlogMutation.isPending
+                }
+                loadingText={isUpdate ? "Updating blog..." : "Creating blog..."}
+                className=" bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl transition-colors duration-200 cursor-pointer px-8 py-2"
               >
-                Create Blog Post
+                {isUpdate ? "Update Blog" : "Create Blog"}
               </LoadingButton>
             </div>
           </form>

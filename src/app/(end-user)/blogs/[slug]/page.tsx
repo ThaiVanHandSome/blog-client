@@ -4,48 +4,37 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import type { Blog } from "@/types/blog.type";
-import { cookies } from "next/headers";
 import LikeButton from "@/components/LikeButton";
 import { CommentSection } from "@/components/comment";
+import { fetchApiServer } from "@/utils/fetchApiServer";
+import { DataResponse } from "@/types/http.type";
 
 async function getBlogById(id: string): Promise<Blog | null> {
-  const cookieHeader = (await cookies()).toString();
-  const res = await fetch(`${API_ENDPOINTS.BLOG.GET_BY_ID(id)}`, {
-    headers: {
-      Cookie: cookieHeader
-    },
-    cache: "no-store"
+  const data = await fetchApiServer<DataResponse<Blog>>({
+    url: API_ENDPOINTS.BLOG.GET_BY_ID(id),
+    method: "GET"
   });
-  if (!res.ok) return null;
-  const data = await res.json();
-  return data.data as Blog;
+  return data.data;
 }
 
 async function checkLiked(blogId: string) {
-  const cookieHeader = (await cookies()).toString();
-  const res = await fetch(`${API_ENDPOINTS.LIKE.CHECK_LIKED(blogId)}`, {
-    headers: {
-      Cookie: cookieHeader
-    },
-    cache: "no-store"
+  const data = await fetchApiServer<DataResponse<boolean>>({
+    url: API_ENDPOINTS.LIKE.CHECK_LIKED(blogId),
+    method: "GET"
   });
-  if (!res.ok) return false;
-  const data = await res.json();
-  return data.data as boolean;
+  return data.data;
 }
 
 export async function generateStaticParams() {
-  const blogsRes = await fetch(`${API_ENDPOINTS.BLOG.GET_ALL}`);
-  if (blogsRes.ok) {
-    const res = await blogsRes.json();
-    const data = res.data;
-
-    return data.map((blog: Blog) => ({
-      slug: buildBlogSlug(blog.title, blog._id)
-    }));
-  }
-
-  return [];
+  const data = await fetchApiServer<DataResponse<Blog[]>>({
+    url: API_ENDPOINTS.BLOG.GET_ALL,
+    method: "GET",
+    includeCookies: false
+  });
+  const blogs = data.data;
+  return blogs.map((blog: Blog) => ({
+    slug: buildBlogSlug(blog.title, blog._id)
+  }));
 }
 
 export default async function BlogDetailPage({
@@ -84,7 +73,7 @@ export default async function BlogDetailPage({
 
   return (
     <main className="px-4 py-8">
-      <div className="container max-w-3xl mx-auto flex flex-col items-center space-y-4">
+      <div className="container max-w-3xl mx-auto flex flex-col items-center space-y-4 text-center">
         <p className="font-semibold text-sm text-bPurple-500">
           Published {formattedDate}
         </p>
