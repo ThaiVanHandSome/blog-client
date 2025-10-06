@@ -26,7 +26,6 @@ export async function fetchApiServer<T>({
 
     const res = await fetch(url, {
       method,
-      credentials: "include",
       headers: {
         ...(includeCookies && { Cookie: cookieHeader }),
         ...(isFormData
