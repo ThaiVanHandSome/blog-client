@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 const ACCESS_TOKEN_NAME = "blog-token";
 
 export function middleware(request: NextRequest) {
+  console.log(request.cookies);
   const accessToken = request.cookies.get(ACCESS_TOKEN_NAME)?.value;
 
   const { pathname } = request.nextUrl;

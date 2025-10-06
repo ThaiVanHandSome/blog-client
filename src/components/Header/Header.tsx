@@ -34,10 +34,19 @@ const Header = () => {
       })
   });
 
+  const removeCookiesFromServerMutation = useMutation({
+    mutationFn: () =>
+      fetchApi({
+        url: "/api/remove-cookies",
+        method: "POST"
+      })
+  });
+
   const handleLogout = async () => {
     logoutMutation.mutate(undefined, {
-      onSuccess: () => {
+      onSuccess: async () => {
         clearAuthCache();
+        await removeCookiesFromServerMutation.mutateAsync();
         router.push("/auth/login");
       }
     });
