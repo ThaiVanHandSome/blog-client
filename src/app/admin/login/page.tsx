@@ -10,25 +10,35 @@ import LoadingButton from "@/components/LoadingButton";
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { useAuth } from "@/hooks";
+import { DataResponse } from "@/types/http.type";
 
 const DEFAULT_VALUES: LoginInput = {
   email: "",
-  password: "",
+  password: ""
 };
 
 export default function AdminLoginPage() {
   const { control, handleSubmit } = useForm<LoginInput>({
     defaultValues: DEFAULT_VALUES,
-    resolver: zodResolver(loginSchema),
+    resolver: zodResolver(loginSchema)
   });
 
   const loginMutation = useMutation({
     mutationFn: (data: LoginInput) =>
-      fetchApi({
+      fetchApi<DataResponse<{ accessToken: string; refreshToken: string }>>({
         url: API_ENDPOINTS.ADMIN.AUTH.LOGIN,
         method: "POST",
-        body: data,
-      }),
+        body: data
+      })
+  });
+
+  const setCookieForServerMutation = useMutation({
+    mutationFn: (data: { accessToken: string; refreshToken: string }) =>
+      fetchApi({
+        url: "/api/set-cookies",
+        method: "POST",
+        body: data
+      })
   });
 
   const { refetch } = useAuth();
@@ -37,10 +47,11 @@ export default function AdminLoginPage() {
 
   const onSubmit = async (data: LoginInput) => {
     loginMutation.mutate(data, {
-      onSuccess: () => {
+      onSuccess: res => {
         refetch();
+        await setCookieForServerMutation.mutateAsync(res.data);
         router.push("/admin");
-      },
+      }
     });
   };
 
