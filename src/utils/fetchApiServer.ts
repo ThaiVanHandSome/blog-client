@@ -51,7 +51,7 @@ export async function fetchApiServer<T>({
     return data as T;
   } catch (error) {
     console.error("❌ [fetchApiServer] Error:", error);
-    throw new Error(error?.message);
+    throw new Error((error as any)?.message);
     return null as T;
   }
 }
