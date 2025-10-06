@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { Heart } from "lucide-react";
 import { API_ENDPOINTS } from "@/constants/api";
 import { fetchApi } from "@/utils/fetchApi";
@@ -8,20 +8,17 @@ import { DataResponse } from "@/types/http.type";
 import { useAuth } from "@/hooks";
 import { useRouter } from "next/navigation";
 
+export const dynamic = "force-dynamic";
+
 type LikeButtonProps = {
   blogId: string;
   initialLikes: number;
-  isLiked: boolean;
 };
 
-export default function LikeButton({
-  blogId,
-  initialLikes,
-  isLiked
-}: LikeButtonProps) {
+export default function LikeButton({ blogId, initialLikes }: LikeButtonProps) {
   const [likes, setLikes] = useState<number>(initialLikes);
   const [isPending, startTransition] = useTransition();
-  const [liked, setLiked] = useState<boolean>(isLiked);
+  const [liked, setLiked] = useState<boolean>(false);
 
   const { isAuthenticated } = useAuth();
   const router = useRouter();
@@ -48,6 +45,17 @@ export default function LikeButton({
       setLikes(v => (liked ? v + 1 : v - 1));
     }
   }
+
+  useEffect(() => {
+    async function checkLiked(blogId: string) {
+      const data = await fetchApi<DataResponse<boolean>>({
+        url: API_ENDPOINTS.LIKE.CHECK_LIKED(blogId),
+        method: "GET"
+      });
+      setLiked(data.data);
+    }
+    checkLiked(blogId);
+  }, [blogId]);
 
   return (
     <button

@@ -4,6 +4,12 @@ const nextConfig: NextConfig = {
   images: {
     domains: ["images.unsplash.com", "res.cloudinary.com"]
   },
+  compiler: {
+    removeConsole:
+      process.env.NODE_ENV === "production"
+        ? { exclude: ["error", "warn"] }
+        : false
+  },
   unstable_includeFiles: [
     "node_modules/next/dist/compiled/@edge-runtime/primitives/**/*.+(js|json)"
   ],

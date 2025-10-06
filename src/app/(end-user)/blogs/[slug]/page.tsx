@@ -18,14 +18,6 @@ async function getBlogById(id: string): Promise<Blog | null> {
   return data.data;
 }
 
-async function checkLiked(blogId: string) {
-  const data = await fetchApiServer<DataResponse<boolean>>({
-    url: API_ENDPOINTS.LIKE.CHECK_LIKED(blogId),
-    method: "GET"
-  });
-  return data.data;
-}
-
 export async function generateStaticParams() {
   const data = await fetchApiServer<DataResponse<Blog[]>>({
     url: API_ENDPOINTS.BLOG.GET_ALL,
@@ -49,8 +41,6 @@ export default async function BlogDetailPage({
 
   const blog = await getBlogById(id);
   if (!blog) return notFound();
-
-  const isLiked = await checkLiked(id);
 
   // const words = blog.content?.trim()?.split(/\s+/).length || 0;
   // const readMinutes = Math.max(1, Math.ceil(words / 200));
@@ -90,11 +80,7 @@ export default async function BlogDetailPage({
             {blog.author.name}
           </span>
         </div>
-        <LikeButton
-          blogId={blog._id}
-          initialLikes={blog.likes}
-          isLiked={isLiked}
-        />
+        <LikeButton blogId={blog._id} initialLikes={blog.likes} />
       </div>
 
       <div className="relative mt-6 aspect-[16/9] w-full overflow-hidden container max-w-6xl mx-auto">

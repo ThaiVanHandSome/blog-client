@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// import { ApiError } from "next/dist/server/api-utils";
 import { cookies } from "next/headers";
 
 type FetchOptions<T> = {
@@ -17,52 +16,41 @@ export async function fetchApiServer<T>({
   method = "GET",
   body,
   headers = {},
-  cache = "no-store",
+  cache,
   revalidate,
   includeCookies = true
 }: FetchOptions<T>): Promise<T> {
   try {
     const isFormData = body instanceof FormData;
     const cookieHeader = includeCookies ? (await cookies()).toString() : "";
+
     const res = await fetch(url, {
       method,
       headers: {
         ...(includeCookies && { Cookie: cookieHeader }),
         ...(isFormData
-          ? headers // nếu là FormData thì không set Content-Type
-          : {
-              "Content-Type": "application/json",
-              ...headers
-            })
+          ? headers
+          : { "Content-Type": "application/json", ...headers })
       },
       body: body
         ? isFormData
           ? (body as any)
           : JSON.stringify(body)
         : undefined,
-      cache,
-      next: revalidate !== undefined ? { revalidate } : undefined
+      ...(cache ? { cache } : {}),
+      ...(revalidate !== undefined ? { next: { revalidate } } : {})
     });
 
-    const contentType = res.headers.get("content-type");
-    const data = contentType?.includes("application/json")
+    const data = res.headers.get("content-type")?.includes("application/json")
       ? await res.json()
       : await res.text();
 
-    if (!res.ok) {
-      const message =
-        (data as any)?.message || `Request failed with status ${res.status}`;
-      console.error(message);
-      return null as T;
-    }
+    if (!res.ok)
+      throw new Error((data as any)?.message ?? `HTTP ${res.status}`);
 
     return data as T;
   } catch (error) {
     console.error("❌ [fetchApiServer] Error:", error);
-    if (error instanceof TypeError && error.message === "fetch failed") {
-      console.error("Network error: Failed to connect to server");
-    }
-    console.error((error as any)?.message ?? "Internal server error");
     return null as T;
   }
 }
