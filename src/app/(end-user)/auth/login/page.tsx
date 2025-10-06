@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import Action from "@/components/form/Action";
 import { useMutation } from "@tanstack/react-query";
 import { useAuth } from "@/hooks";
+import { DataResponse } from "@/types/http.type";
 
 const DEFAULT_VALUES: LoginInput = {
   email: "",
@@ -25,7 +26,7 @@ export default function LoginPage() {
 
   const loginMutation = useMutation({
     mutationFn: (data: LoginInput) =>
-      fetchApi({
+      fetchApi<DataResponse<{ accessToken: string; refreshToken: string }>>({
         url: API_ENDPOINTS.AUTH.LOGIN,
         method: "POST",
         body: data
@@ -36,10 +37,20 @@ export default function LoginPage() {
 
   const router = useRouter();
 
+  const setCookieForServerMutation = useMutation({
+    mutationFn: (data: { accessToken: string; refreshToken: string }) =>
+      fetchApi({
+        url: "/api/set-cookies",
+        method: "POST",
+        body: data
+      })
+  });
+
   const onSubmit = async (data: LoginInput) => {
     loginMutation.mutate(data, {
-      onSuccess: async () => {
+      onSuccess: async res => {
         await refetch();
+        await setCookieForServerMutation.mutateAsync(res.data);
         router.push("/");
       }
     });

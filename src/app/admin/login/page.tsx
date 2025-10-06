@@ -48,7 +48,7 @@ export default function AdminLoginPage() {
   const onSubmit = async (data: LoginInput) => {
     loginMutation.mutate(data, {
       onSuccess: async res => {
-        refetch();
+        await refetch();
         await setCookieForServerMutation.mutateAsync(res.data);
         router.push("/admin");
       }
