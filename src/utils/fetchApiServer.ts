@@ -23,9 +23,6 @@ export async function fetchApiServer<T>({
   try {
     const isFormData = body instanceof FormData;
     const cookieHeader = includeCookies ? (await cookies()).toString() : "";
-    console.log({
-      cookieHeader
-    });
 
     const res = await fetch(url, {
       method,

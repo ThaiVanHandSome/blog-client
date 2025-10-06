@@ -6,15 +6,10 @@ import { Blog } from "@/types/blog.type";
 import { API_ENDPOINTS } from "@/constants/api";
 import { fetchApiServer } from "@/utils/fetchApiServer";
 import { DataResponse } from "@/types/http.type";
-import { cookies } from "next/headers";
 
 export const dynamic = "force-dynamic";
 
 export default async function MyBlogsPage() {
-  const cookiesRes = await cookies().toString();
-  console.log({
-    cookiesRes
-  });
   const data = await fetchApiServer<DataResponse<Blog[]>>({
     url: API_ENDPOINTS.BLOG.GET_OWN_BLOGS,
     method: "GET"

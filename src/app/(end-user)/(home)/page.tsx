@@ -4,13 +4,14 @@ import { Blog } from "@/types/blog.type";
 import { DataResponse } from "@/types/http.type";
 import { fetchApiServer } from "@/utils/fetchApiServer";
 
+export const dynamic = "force-static";
+
 export default async function HomePage() {
   const data = await fetchApiServer<DataResponse<Blog[]>>({
     url: API_ENDPOINTS.BLOG.GET_ALL,
     method: "GET",
     includeCookies: false
   });
-  console.log(data);
   const blogs = data.data;
 
   return (
