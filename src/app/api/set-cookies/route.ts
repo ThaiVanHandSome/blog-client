@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
     secure: true,
     sameSite: "none",
     path: "/",
-    maxAge: 60 * 60
+    maxAge: 60 * 60 * 24 * 30
   });
 
   res.cookies.set("blog-refresh-token", refreshToken, {
@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
     secure: true,
     sameSite: "lax",
     path: "/",
-    maxAge: 60 * 60 * 24 * 7
+    maxAge: 60 * 60 * 24 * 30
   });
 
   return res;
