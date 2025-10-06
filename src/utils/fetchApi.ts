@@ -4,10 +4,10 @@
 import { ApiError } from "next/dist/server/api-utils";
 import { toast } from "sonner";
 
-type FetchOptions<T> = {
+type FetchOptions = {
   url: string;
   method?: string;
-  body?: T;
+  body?: any;
   headers?: Record<string, string>;
   cache?: RequestCache;
   showToastWhenSuccess?: boolean;
@@ -22,7 +22,7 @@ export async function fetchApi<T>({
   cache,
   showToastWhenSuccess = true,
   showToastWhenError = true
-}: FetchOptions<T>): Promise<T> {
+}: FetchOptions): Promise<T> {
   try {
     const isFormData = body instanceof FormData;
 
