@@ -14,13 +14,13 @@ import { useAuth } from "@/hooks";
 
 const DEFAULT_VALUES: LoginInput = {
   email: "",
-  password: "",
+  password: ""
 };
 
 export default function LoginPage() {
   const { control, handleSubmit } = useForm<LoginInput>({
     defaultValues: DEFAULT_VALUES,
-    resolver: zodResolver(loginSchema),
+    resolver: zodResolver(loginSchema)
   });
 
   const loginMutation = useMutation({
@@ -28,8 +28,8 @@ export default function LoginPage() {
       fetchApi({
         url: API_ENDPOINTS.AUTH.LOGIN,
         method: "POST",
-        body: data,
-      }),
+        body: data
+      })
   });
 
   const { refetch } = useAuth();
@@ -38,10 +38,10 @@ export default function LoginPage() {
 
   const onSubmit = async (data: LoginInput) => {
     loginMutation.mutate(data, {
-      onSuccess: () => {
-        refetch();
+      onSuccess: async () => {
+        await refetch();
         router.push("/");
-      },
+      }
     });
   };
 

@@ -51,7 +51,8 @@ export default function LikeButton({ blogId, initialLikes }: LikeButtonProps) {
       const data = await fetchApi<DataResponse<boolean>>({
         url: API_ENDPOINTS.LIKE.CHECK_LIKED(blogId),
         method: "GET",
-        showToastWhenError: false
+        showToastWhenError: false,
+        showToastWhenSuccess: false
       });
       setLiked(data.data);
     }
