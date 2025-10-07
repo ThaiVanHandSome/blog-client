@@ -189,6 +189,41 @@
   .blog-content a:focus {
     @apply outline-none ring-2 ring-indigo-300 ring-offset-2;
   }
+
+  .blog-content ul,
+  .blog-content ol {
+    @apply font-display text-gray-700 leading-relaxed mb-6 pl-6;
+    font-family: var(--font-display);
+  }
+
+  /* UL: danh sách gạch đầu dòng */
+  .blog-content ul {
+    @apply list-disc;
+  }
+
+  /* OL: danh sách đánh số */
+  .blog-content ol {
+    @apply list-decimal;
+  }
+
+  /* Style cho từng item */
+  .blog-content li {
+    @apply mb-2;
+  }
+
+  /* Nếu có nested list */
+  .blog-content ul ul,
+  .blog-content ol ol,
+  .blog-content ul ol,
+  .blog-content ol ul {
+    @apply mt-2 mb-2 pl-6;
+    list-style-type: circle;
+  }
+
+  /* Optional – hover hiệu ứng nhẹ */
+  .blog-content li:hover::marker {
+    color: theme("colors.indigo.500");
+  }
 }
 
 /* Custom animations and utilities */
