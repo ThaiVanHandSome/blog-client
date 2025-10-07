@@ -54,7 +54,7 @@ export default function MyBlogCard({ blog }: Readonly<MyBlogCardProps>) {
 
   return (
     <div className="group bg-white rounded-lg border border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md">
-      <div className="flex items-stretch gap-4 p-4">
+      <div className="flex items-stretch flex-col lg:flex-row gap-4 p-4">
         {/* Thumbnail */}
         <div className="relative h-24 w-36 md:h-28 md:w-44 shrink-0 overflow-hidden rounded-lg">
           <Image

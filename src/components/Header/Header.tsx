@@ -54,10 +54,10 @@ const Header = () => {
 
   return (
     <header
-      className={`fixed top-3 left-0 right-0 z-50 w-full transition-all duration-300 container max-w-[80%] mx-auto rounded-2xl
+      className={`fixed top-3 left-0 right-0 z-50 w-full transition-all duration-300 container max-w-[1180px] mx-auto rounded-2xl
               bg-white border border-gray-200 shadow-lg`}
     >
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <div className="flex items-center gap-8">
@@ -85,7 +85,7 @@ const Header = () => {
           </div>
 
           {/* User Profile */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center md:space-x-4 space-x-1">
             {isLoading ? (
               // Loading state
               <div className="flex items-center space-x-3">
@@ -115,7 +115,7 @@ const Header = () => {
                       </AvatarFallback>
                     </Avatar>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent>
+                  <DropdownMenuContent className="hidden md:block">
                     <DropdownMenuItem>
                       <Link href="/profile">Profile</Link>
                     </DropdownMenuItem>
@@ -129,14 +129,14 @@ const Header = () => {
                   type="button"
                   aria-label="Sign out"
                   onClick={handleLogout}
-                  className="p-2 rounded hover:bg-gray-100 text-gray-700"
+                  className="p-2 rounded hover:bg-gray-100 text-gray-700 hidden md:block"
                 >
                   <LogOutIcon className="size-5" strokeWidth={1.25} />
                 </button>
               </>
             ) : (
               // Not authenticated state
-              <div className="flex items-center space-x-3">
+              <div className="items-center space-x-3 hidden md:flex">
                 <Link href="/auth/login">
                   <Button variant="ghost" size="sm">
                     Sign In
@@ -174,41 +174,51 @@ const Header = () => {
         {isMenuOpen && (
           <div className="md:hidden py-4 border-t border-gray-200">
             <nav className="flex flex-col space-y-2">
-              <Link
-                href="/blogs"
-                className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded transition-colors duration-200"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                All Blogs
-              </Link>
               {isAuthenticated && (
-                <Link
-                  href="/blogs/actions/new"
-                  className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded transition-colors duration-200"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Create Blog
-                </Link>
+                <>
+                  <Link
+                    href="/blogs/actions/new"
+                    className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded transition-colors duration-200"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Create Blog
+                  </Link>
+                  <Link
+                    href="/profile"
+                    className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded transition-colors duration-200"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Profile
+                  </Link>
+                  <Link
+                    href="/my-blogs"
+                    className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded transition-colors duration-200"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    My blogs
+                  </Link>
+                  <button
+                    type="button"
+                    aria-label="Sign out"
+                    onClick={handleLogout}
+                    className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded transition-colors duration-200 text-left"
+                  >
+                    Log out
+                  </button>
+                </>
               )}
-              <Link
-                href="/about"
-                className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded transition-colors duration-200"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                About
-              </Link>
               {!isAuthenticated && (
                 <div className="flex flex-col space-y-2 pt-2 border-t border-gray-200">
                   <Link
                     href="/auth/login"
-                    className="px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors duration-200"
+                    className="px-4 py-2 text-bPurple-500 rounded transition-colors duration-200"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     Sign In
                   </Link>
                   <Link
                     href="/auth/register"
-                    className="px-4 py-2 bg-blue-600 text-white hover:bg-blue-700 rounded transition-colors duration-200 hidden"
+                    className="px-4 py-2 text-blue-600 rounded transition-colors duration-200"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     Sign Up

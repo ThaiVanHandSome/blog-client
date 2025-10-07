@@ -36,8 +36,8 @@ export default function FeaturedBlog({ blog }: FeaturedBlogProps) {
           className="w-full h-full object-cover aspect-[2.4/1] mb-8"
         />
 
-        <div className="text-center max-w-4xl mx-auto flex flex-col items-center gap-4">
-          <h3 className="text-2xl md:text-4xl leading-12 font-bold drop-shadow-lg mb-4  flex items-center gap-2">
+        <div className="text-center max-w-4xl mx-auto flex flex-col items-center gap-4 px-2 lg:px-0">
+          <h3 className="text-2xl md:text-4xl leading-9 md:leading-12 font-bold drop-shadow-lg mb-4  flex items-center flex-col lg:flex-row gap-2">
             <Badge className="bg-red-600">New</Badge> {blog.title}
           </h3>
           <p className="italic font-serif text-sm text-gray-500">
