@@ -7,7 +7,7 @@ export default function EndUserLayout({
 }>) {
   return (
     <>
-      <Header /> {children}
+      <Header /> <div className="pt-24 bg-gray-50">{children}</div>
     </>
   );
 }

@@ -1,4 +1,5 @@
 import BlogCard from "@/components/BlogCard";
+import FeaturedBlog from "@/components/FeaturedBlog";
 import { API_ENDPOINTS } from "@/constants/api";
 import { Blog } from "@/types/blog.type";
 import { DataResponse } from "@/types/http.type";
@@ -13,10 +14,16 @@ export default async function HomePage() {
     includeCookies: false
   });
   const blogs = data.data;
+  const featuredBlog = blogs.length > 0 ? blogs.shift() : null;
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen py-8">
+      <div className="max-w-6xl mx-auto">
+        <FeaturedBlog blog={featuredBlog} />
+      </div>
+      <div className="my-12 w-full max-w-5xl mx-auto h-[0.5px] border border-slate-200"></div>
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <p className="text-lg mb-4 font-semibold text-gray-400">Recent blogs</p>
         <div className="space-y-4">
           {blogs.map(blog => (
             <BlogCard key={blog._id} blog={blog} />

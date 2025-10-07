@@ -54,8 +54,8 @@ const Header = () => {
 
   return (
     <header
-      className={`sticky top-3 z-50 w-full transition-all duration-300 container max-w-[80%] mx-auto rounded-2xl
-              bg-white/20 backdrop-blur-md border border-white/30 shadow-lg`}
+      className={`fixed top-3 left-0 right-0 z-50 w-full transition-all duration-300 container max-w-[80%] mx-auto rounded-2xl
+              bg-white border border-gray-200 shadow-lg`}
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
