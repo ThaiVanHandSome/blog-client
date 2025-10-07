@@ -11,8 +11,8 @@ export function middleware(request: NextRequest) {
 
   const protectesRoutes = ["/blogs/actions/new"];
 
-  if (pathname.startsWith("/auth/register"))
-    return NextResponse.redirect(new URL("/auth/login", request.url));
+  // if (pathname.startsWith("/auth/register"))
+  //   return NextResponse.redirect(new URL("/auth/login", request.url));
 
   if (accessToken && pathname.startsWith("/auth")) {
     return NextResponse.redirect(new URL("/", request.url));

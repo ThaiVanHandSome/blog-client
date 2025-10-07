@@ -2,7 +2,13 @@
 "use client";
 
 import React, { useCallback, useMemo } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle
+} from "../ui/dialog";
 import { Input } from "../ui/input";
 import { useForm } from "react-hook-form";
 import { useAtom } from "jotai";
@@ -116,6 +122,9 @@ export default function VerifyTokenDialog({ type }: VerifyTokenProps) {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{dialogTitle}</DialogTitle>
+          <DialogDescription>
+            Please check your email to get the verification code.
+          </DialogDescription>
         </DialogHeader>
         <form onSubmit={onSubmit}>
           <Input
